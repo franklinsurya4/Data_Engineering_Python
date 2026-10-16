@@ -1,0 +1,30 @@
+1. Important SQL date and time functions
+
+Function	Purpose
+
+NOW()	Current date and time
+CURDATE()	Current date
+CURTIME()	Current time
+DATE()	Extract date from a datetime
+TIME()	Extract time from a datetime
+YEAR()	Extract year
+MONTH()	Extract month number
+DAY()	Extract day of month
+HOUR()	Extract hour
+MINUTE()	Extract minute
+SECOND()	Extract second
+
+
+2. Date calculation functions
+
+These are especially useful in interviews.
+
+Function	Purpose
+
+DATEDIFF(date1, date2)	Difference in days
+TIMESTAMPDIFF(unit, start, end)	Difference in years, months, days, hours, etc.
+DATE_ADD(date, INTERVAL n unit)	Add an interval
+DATE_SUB(date, INTERVAL n unit)	Subtract an interval
+LAST_DAY(date)	Last day of the month
+DAYNAME(date)	Name of the weekday
+MONTHNAME(date)	Name of the month
