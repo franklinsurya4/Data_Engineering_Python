@@ -48,7 +48,8 @@ LAST_VALUE()  -	Retrieves the last value in a window
 
 Aggregate functions:
 
-Function	    Purpose	Example
+Function	      Purpose	Example
+
 COUNT()  -	Counts rows or values	COUNT(*)
 SUM()  -	Adds values	SUM(salary)
 AVG()  -	Calculates average	AVG(salary)
