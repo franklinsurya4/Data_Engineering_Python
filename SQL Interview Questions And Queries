@@ -1,81 +1,97 @@
 USE Franklin_employee_practice_db;
 
 -- Q1. Display all employees
+
 SELECT * FROM employees;
 
 -- Q2. Display employee names and salaries
+
 SELECT emp_id,first_name,last_name,salary 
 FROM employees;
 
 -- Q3. Find employees earning more than 5000
+
 SELECT first_name,last_name,salary 
 FROM employees 
 WHERE salary>5000;
 
 -- Q4. Find employees earning between 3000 and 7000
+
 SELECT first_name,last_name,salary 
 FROM employees 
 WHERE salary 
 BETWEEN 3000 AND 7000;
 
 -- Q5. Find the five highest-paid employees
+
 SELECT first_name,salary 
 FROM employees 
 ORDER BY salary DESC 
 LIMIT 5;
 
 -- Q6. Find employees without a manager
+
 SELECT * FROM employees 
 WHERE manager_id IS NULL;
 
 -- Q7. Count employees in each department
+
 SELECT department_id,COUNT(emp_id) AS emp_count 
 FROM employees 
 GROUP BY department_id; 
 
 -- Q8. Find departments with more than five employees
+
 SELECT department_id,COUNT(emp_id) AS emp_count 
 FROM employees 
 GROUP BY department_id 
 HAVING COUNT(emp_id)>5;
 
 -- Q9. Find the company average salary
+
 SELECT AVG(salary) AS average_salary 
 FROM employees;
 
 -- Q10. Find employees earning above the company average
+
 SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);
 
 -- Q11. Find the second-highest distinct salary
+
 SELECT MAX(salary) AS second_max_salary  
 FROM employees 
 WHERE salary < (SELECT MAX(salary) AS first_max_sal FROM employees);
 
 -- Q12. Find employees earning above their department average
+
 SELECT e.first_name,e.salary,e.department_id 
 FROM employees e 
 WHERE e.salary > (SELECT AVG(d.salary) 
 FROM employees d 
-WHERE e.department_id = d.department_id 
+WHERE e.department_id = d.department_id
 );
 
 -- Q13. Display employee names and department names
+
 SELECT e.first_name,e.last_name,d.department_name
 FROM employees e JOIN departments d
 ON e.department_id = d.department_id;
 
 -- Q14. Display employee names and job titles
+
 SELECT e.first_name,e.last_name,j.job_title 
 FROM employees e JOIN jobs j 
 ON e.job_id = j.job_id;
 
 -- Q15. Find departments without employees
+
 SELECT e.emp_id,d.department_id,d.department_name 
 FROM employees e JOIN departments d
 ON e.department_id = d.department_id
 WHERE emp_id IS NULL;
 
 -- Q16. Display employees and their managers
+
 SELECT e.first_name AS emp_first_name,
        e.last_name AS emp_last_name,
        m.first_name AS mgr_first_name,
@@ -85,6 +101,7 @@ LEFT JOIN employees m
 ON e.manager_id = m.emp_id;
 
 -- Q17. Find employees earning more than their managers
+
 SELECT e.emp_id,e.first_name,e.last_name,e.salary,
        m.first_name AS mgr_first_name,
        m.last_name AS mgr_last_name,
@@ -95,16 +112,19 @@ ON e.manager_id = m.emp_id
 WHERE e.salary > m.salary;
 
 -- Q18. Find the highest salary in each department
+
 SELECT department_id, MAX(salary) AS highest_sal
 FROM employees
 GROUP BY department_id;
 
 -- Q19. Rank employees by salary
+
 SELECT emp_id,first_name,salary,
   DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
 FROM employees;
 
 -- Q20. Find the top three salary ranks in each department
+
 SELECT emp_id,first_name,department_id,salary,
     DENSE_RANK() OVER (
         PARTITION BY department_id
@@ -113,6 +133,7 @@ SELECT emp_id,first_name,department_id,salary,
 FROM employees;
 
 -- Q21. Find employees hired during 2022
+
 SELECT emp_id,first_name,hire_date
 FROM employees
 WHERE hire_date >= '2022-01-01' AND hire_date <= '2022-12-31';
@@ -122,17 +143,20 @@ FROM employees
 WHERE hire_date BETWEEN '2022-01-01' AND '2022-12-31';
 
 -- Q22. Calculate years of service
+
 SELECT emp_id,first_name,hire_date,
 TIMESTAMPDIFF(YEAR,hire_date,CURDATE()) AS years_of_service
 FROM employees;
 
 -- Q23. Find duplicate email addresses
+
 SELECT email, COUNT(*) AS occurrences
 FROM employees
 GROUP BY email
 HAVING COUNT(*) > 1;
 
 -- Q24. Find employee counts by job title
+
 SELECT j.job_title,COUNT(e.emp_id) AS emp_count 
 FROM employees e 
 LEFT JOIN jobs j 
@@ -140,6 +164,7 @@ ON e.job_id = j.job_id
 GROUP BY j.job_id,j.job_title;
 
 -- Q25. Find average salary by city
+
 SELECT l.city,AVG(e.salary) AS avg_sal
 FROM locations l 
 JOIN departments d ON l.location_id = d.location_id
@@ -147,16 +172,19 @@ JOIN employees e ON d.department_id = e.department_id
 GROUP BY l.city;
 
 -- Q26. Calculate annual salary
+
 SELECT emp_id,first_name,salary,
     salary*12 AS annual_salary
 FROM employees;
 
 -- Q27. Replace missing commission with zero
+
 SELECT emp_id,first_name,
    COALESCE(commission_pct, 0) AS commission_pct
 FROM employees;
 
 -- Q28. Find jobs without employees
+
 SELECT j.job_id,j.job_title
 FROM jobs j 
 LEFT JOIN employees e
@@ -164,12 +192,14 @@ ON j.job_id = e.job_id
 WHERE e.emp_id IS NULL;
 
 -- Q29. Find each department's payroll
+
 SELECT department_id,SUM(salary) AS total_payroll
 FROM employees
 GROUP BY department_id
 ORDER BY total_payroll DESC;
 
 -- Q30. Calculate cumulative payroll
+
 SELECT emp_id,first_name,salary,
     SUM(salary) OVER (
         ORDER BY emp_id
@@ -178,11 +208,13 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q31. Find employees earning the lowest salary
+
 SELECT emp_id,first_name,last_name,salary
 FROM employees 
 WHERE salary = (SELECT MIN(salary) FROM employees);
 
 -- Q32. Find the third-highest distinct salary
+
 SELECT DISTINCT(salary) FROM employees
 ORDER BY salary DESC LIMIT 1 OFFSET 2;
 
@@ -193,47 +225,55 @@ WHERE salary <
     WHERE salary < (SELECT MAX(salary) FROM employees));
 
 -- Q33. Find employees earning above their job's average salary
+
 SELECT e.first_name,e.email,e.salary 
 FROM employees e
 WHERE e.salary > (SELECT AVG(j.salary) FROM employees j
 WHERE e.job_id = j.job_id);
 
 -- Q34. Find employees earning the highest salary in each department
+
 SELECT e.first_name,e.email,e.salary
 FROM employees e
 WHERE e.salary = (SELECT MAX(d.salary) AS highest_salary FROM employees d 
 WHERE e.department_id = d.department_id);
 
 -- Q35. Find employees earning the lowest salary in each department
+
 SELECT e.first_name,e.email,e.department_id,e.salary
 FROM employees e
 WHERE e.salary = (SELECT MIN(d.salary) AS lowest_salary FROM employees d 
 WHERE e.department_id = d.department_id);
 
 -- Q36. Find departments with average salary above 7000
+
 SELECT department_id,AVG(salary) AS average_salary
 FROM employees
 GROUP BY department_id
 HAVING AVG(salary) > 7000;
 
 -- Q37. Find departments with total payroll above 50000
+
 SELECT department_id,SUM(salary) AS total_payroll
 FROM employees
 GROUP BY department_id
 HAVING SUM(salary) > 50000;
 
 -- Q38. Count employees for each job
+
 SELECT job_id,COUNT(emp_id) AS emp_count
 FROM employees
 GROUP BY job_id; 
 
 -- Q39. Find jobs with more than five employees
+
 SELECT job_id,COUNT(emp_id) AS emp_count
 FROM employees
 GROUP BY job_id
 HAVING COUNT(emp_id) > 5;
 
 -- Q40. Find employees working in department 20
+
 SELECT * FROM employees
 WHERE department_id = 20;
 
@@ -242,16 +282,19 @@ FROM employees
 WHERE department_id=20;
 
 -- Q41. Find employees whose first name starts with S
+
 SELECT first_name 
 FROM employees
 WHERE first_name LIKE 'S%';
 
 -- Q42. Find employees whose last name ends with n
+
 SELECT last_name 
 FROM employees
 WHERE last_name LIKE '%n';
 
 -- Q43. Find employees whose names contain 'an'
+
 SELECT first_name
 FROM employees
 WHERE first_name LIKE '%an%';
@@ -265,35 +308,43 @@ FROM employees
 WHERE first_name LIKE '%an%' OR last_name LIKE '%an%';
 
 -- Q44. Find employees hired before 2020
+
 SELECT * FROM employees
 WHERE hire_date < '2020-01-01';
 
 -- Q45. Find employees hired in the last five years
+
 SELECT * FROM employees
 WHERE hire_date >= DATE_SUB(NOW(),INTERVAL 5 YEAR);
 
 -- Q46. Display employee names in uppercase
+
 SELECT UPPER(first_name) AS first_name_upper,UPPER(last_name) AS second_name_upper
 FROM employees;
 
 -- Q47. Display full names
+
 SELECT CONCAT(first_name,' ',last_name) AS full_name
 FROM employees;
 
 -- Q48. Find employees with missing commission
+
 SELECT * FROM employees
 WHERE commission_pct IS NULL;
 
 -- Q49. Find employees with commission greater than zero
+
 SELECT * FROM employees
 WHERE commission_pct > 0;
 
 -- Q50. Calculate a 10% salary increase
+
 SELECT emp_id,first_name,last_name,salary,
 ROUND(salary*1.10,2) AS increased_salary
 FROM employees;
 
 -- Q51. Find employees whose salary is outside their job salary range
+
 SELECT e.emp_id,e.first_name,e.salary,j.job_title,j.min_salary,j.max_salary
 FROM employees e 
 JOIN jobs j
@@ -302,6 +353,7 @@ WHERE e.salary < j.min_salary
 OR e.salary > j.max_salary;
 
 -- Q52. Find employees whose salary is within their job salary range
+
 SELECT e.emp_id,e.first_name,e.salary,j.job_title,j.min_salary,j.max_salary
 FROM employees e
 JOIN jobs j
@@ -309,12 +361,14 @@ ON e.job_id=j.job_id
 WHERE e.salary BETWEEN j.min_salary AND j.max_salary;
 
 -- Q53. Display departments and their locations
+
 SELECT d.department_id,d.department_name,l.city
 FROM departments d 
 LEFT JOIN locations l 
 ON d.location_id=l.location_id; 
 
 -- Q54. Find employees working in Chennai
+
 SELECT e.emp_id,e.first_name,d.department_id,l.city
 FROM employees e 
 JOIN departments d ON e.department_id=d.department_id
@@ -322,6 +376,7 @@ JOIN locations l ON d.location_id=l.location_id
 WHERE l.city='Chennai';
 
 -- Q55. Find departments without employees (without means NULL)
+
 SELECT d.department_id,d.department_name,e.emp_id
 FROM departments d
 JOIN employees e 
@@ -329,6 +384,7 @@ ON e.department_id=d.department_id
 WHERE e.emp_id IS NULL;
 
 -- Q56. Find jobs without employees
+
 SELECT j.job_id,j.job_title,e.emp_id AS emp_id
 FROM jobs j
 LEFT JOIN employees e
@@ -336,6 +392,7 @@ ON j.job_id=e.job_id
 WHERE e.emp_id IS NULL;
 
 -- Q57. Count departments in each city
+
 SELECT l.city,COUNT(d.department_id)
 FROM departments d
 LEFT JOIN locations l
@@ -343,6 +400,7 @@ ON d.location_id=l.location_id
 GROUP BY l.city;
 
 -- Q58. Find employees earning more than employee 11
+
 SELECT emp_id,first_name,department_id,salary 
 FROM employees
 WHERE salary > (SELECT salary FROM employees
@@ -350,24 +408,28 @@ WHERE emp_id=11
 );
 
 -- Q59. Find employees with the same job as employee 11
+
 SELECT emp_id,first_name,department_id,job_id
 FROM employees
 WHERE job_id = (SELECT job_id FROM employees
 WHERE emp_id=11);
 
 -- Q60. Find employees hired before employee 11
+
 SELECT emp_id,first_name,hire_date
 FROM employees 
 WHERE hire_date < (SELECT hire_date FROM employees
 WHERE emp_id=11);
 
 -- Q61. Find employees who are managers
+
 SELECT DISTINCT m.emp_id,m.first_name,m.job_id
 FROM employees m  
 JOIN employees e 
 ON m.emp_id=e.manager_id;
 
 -- Q62. Find employees who are not managers
+
 SELECT emp_id,first_name,job_id
 FROM employees
 WHERE NOT job_id='MGR';
@@ -377,6 +439,7 @@ FROM employees
 WHERE job_id <> 'MGR';
 
 -- Q64. Find employees earning more than their department average
+
 SELECT e.emp_id,e.first_name,e.salary
 FROM employees e
 WHERE e.salary > (SELECT AVG(d.salary) FROM employees d
@@ -387,13 +450,13 @@ FROM employees
 WHERE salary > (SELECT AVG(salary) FROM employees);
 
 -- Q65. Rank employees by salary within each department
+
 SELECT emp_id,first_name,salary,
     DENSE_RANK() OVER(
         PARTITION BY department_id
         ORDER BY salary DESC
     ) AS salary_rank
 FROM employees;
-
 
 SELECT emp_id,first_name,salary,
     RANK() OVER(
@@ -403,7 +466,8 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q66. Find the second-highest salary in each department
-WITH second_highest AS(    --  line 406 (CTE (Common Table Expression))
+
+WITH second_highest AS(    -- CTE (Common Table Expression)
 SELECT emp_id,first_name,department_id,salary,
     DENSE_RANK() OVER (
         PARTITION BY department_id
@@ -416,7 +480,8 @@ FROM second_highest
 WHERE salary_rank = 2;
 
 -- Q67. Find the top two salary ranks in each job
-WITH top_two_salary_ranks AS (    --  line 406 (CTE (Common Table Expression))
+
+WITH top_two_salary_ranks AS (    -- CTE (Common Table Expression)
 SELECT emp_id,first_name,department_id,job_id,salary,
     DENSE_RANK() OVER (
         PARTITION BY job_id
@@ -429,6 +494,7 @@ FROM top_two_salary_ranks
 WHERE salary_rank <= 2;
 
 -- Q68. Display salary and department average side by side
+
 SELECT emp_id,first_name,salary,
     AVG(salary) OVER (
         PARTITION BY department_id
@@ -436,6 +502,7 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q69. Compare each salary with the previous salary by employee ID
+
 SELECT emp_id,first_name,salary,
 LAG(salary) OVER (
         ORDER BY emp_id
@@ -443,6 +510,7 @@ LAG(salary) OVER (
 FROM employees;
 
 -- Q70. Compare each salary with the next salary by employee ID
+
 SELECT emp_id,first_name,salary,
     LEAD(salary) OVER (
         ORDER BY emp_id
@@ -450,6 +518,7 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q71. Assign row numbers by salary, highest first
+
 SELECT emp_id,first_name,salary,
     ROW_NUMBER() OVER (
         ORDER BY salary DESC
@@ -457,6 +526,7 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q72. Divide employees into four salary groups
+
 SELECT emp_id,first_name,salary,
     NTILE(4) OVER (
         ORDER BY salary DESC
@@ -464,11 +534,13 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q73. Calculate each employee's percentage of total payroll
+
 SELECT emp_id,first_name,salary,
     ROUND(salary*100.0 / SUM(salary) OVER(),2) AS total_payroll_percent
 FROM employees;
 
 -- Q74. Count employees hired in each year
+
 SELECT
     YEAR(hire_date) AS hire_year,
     COUNT(*) AS total_employees
@@ -477,6 +549,7 @@ GROUP BY YEAR(hire_date)
 ORDER BY hire_year;
 
 -- Q75. Calculate payroll by hire year
+
 SELECT 
     YEAR(hire_date) AS hire_year,
     SUM(salary) AS total_payroll
@@ -485,6 +558,7 @@ GROUP BY YEAR(hire_date)
 ORDER BY hire_year;
 
 -- Q76. Find employees hired on a Monday
+
 SELECT * FROM employees
 WHERE DAYOFWEEK(hire_date) = 2;
 
@@ -492,6 +566,7 @@ SELECT * FROM employees
 WHERE DAYNAME(hire_date) = 'Monday';
 
 -- Q77. Find employees with at least 10 years of service
+
 SELECT emp_id, first_name, hire_date
 FROM employees
 WHERE TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) >= 10;
@@ -501,6 +576,7 @@ FROM employees
 WHERE hire_date <= DATE_SUB(CURDATE(), INTERVAL 10 YEAR);
 
 -- Q78. Find duplicate email addresses
+
 SELECT email,COUNT(*) AS email_count
 FROM employees
 WHERE email IS NOT NULL
@@ -508,12 +584,14 @@ GROUP BY email
 HAVING COUNT(*) > 1; 
 
 -- Q79. Find duplicate employee names
+
 SELECT emp_id,first_name,COUNT(*) AS emp_count
 FROM employees
 GROUP BY emp_id
 HAVING COUNT(*) > 1;
 
 -- Q80. Find the department with the highest payroll
+
 SELECT d.department_id,d.department_name,
     SUM(e.salary) AS total_payroll
 FROM departments d 
@@ -524,6 +602,7 @@ ORDER BY total_payroll DESC
 LIMIT 1;
 
 -- Q81. Find employees earning more than their department's average salary
+
 SELECT e.emp_id,e.first_name,e.last_name,e.salary
 FROM employees e
 WHERE e.salary > (SELECT AVG(e2.salary) FROM employees e2
@@ -549,7 +628,6 @@ FROM employees e
 WHERE e.salary < (SELECT AVG(e2.salary) FROM employees e2
 WHERE e.department_id = e2.department_id);
 
-
 SELECT e.emp_id,e.first_name,e.last_name,e.salary
 FROM employees e
 JOIN departments d 
@@ -558,13 +636,12 @@ GROUP BY e.emp_id,e.first_name,e.last_name,e.department_id
 HAVING e.salary < ( SELECT AVG(e2.salary) FROM employees e2
 WHERE e.department_id = e2.department_id);
 
--- 83. Find employees earning the highest salary in each department
+-- Q83. Find employees earning the highest salary in each department
 
 SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
 FROM employees e
 WHERE e.salary = (SELECT MAX(d.salary) FROM employees d
 WHERE e.department_id = d.department_id);
-
 
 SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
 FROM employees e
@@ -574,13 +651,12 @@ GROUP BY e.emp_id,e.first_name
 HAVING e.salary = (SELECT MAX(e2.salary) FROM employees e2
 WHERE e.department_id = e2.department_id );
 
--- 84. Find employees earning the lowest salary in each department
+-- Q84. Find employees earning the lowest salary in each department
 
 SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
 FROM employees e
 WHERE e.salary = (SELECT MIN(d.salary) FROM employees d
 WHERE e.department_id = d.department_id);
-
 
 SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
 FROM employees e
@@ -590,7 +666,8 @@ GROUP BY e.emp_id,e.first_name
 HAVING e.salary = (SELECT MIN(e2.salary) FROM employees e2
 WHERE e.department_id = e2.department_id );
 
--- 85. Find departments having more than five employees
+-- Q85. Find departments having more than five employees
+
 SELECT d.department_id, d.department_name, COUNT(e.emp_id) AS emp_count
 FROM employees e
 JOIN departments d
@@ -598,7 +675,8 @@ JOIN departments d
 GROUP BY d.department_id, d.department_name
 HAVING COUNT(e.emp_id) >= 5;
 
--- 86. Find departments having no employees
+-- Q86. Find departments having no employees
+
 SELECT d.department_id, d.department_name
 FROM departments d
 LEFT JOIN employees e
@@ -622,7 +700,8 @@ WHERE NOT EXISTS (
     WHERE e.department_id = d.department_id
 );
 
--- 87. Find employees whose department exists in the departments table
+-- Q87. Find employees whose department exists in the departments table
+
 SELECT e.emp_id, e.first_name, e.last_name, e.department_id
 FROM employees e
 JOIN departments d
@@ -637,7 +716,8 @@ WHERE EXISTS (
     WHERE d.department_id = e.department_id
 );
 
--- 88. Find employees whose department ID does not match any department
+-- Q88. Find employees whose department ID does not match any department
+
 SELECT e.emp_id, e.first_name, e.last_name, e.department_id
 FROM employees e
 LEFT JOIN departments d
@@ -653,7 +733,8 @@ WHERE NOT EXISTS (
     WHERE d.department_id = e.department_id
 );
 
--- 89. Find employees whose salary is greater than every salary in department 50
+-- Q89. Find employees whose salary is greater than every salary in department 50
+
 SELECT emp_id, first_name, last_name, salary
 FROM employees
 WHERE salary > ALL (
@@ -662,7 +743,8 @@ WHERE salary > ALL (
     WHERE department_id = 50
 );
 
--- 90. Find employees whose salary is greater than at least one employee in department 50
+-- Q90. Find employees whose salary is greater than at least one employee in department 50
+
 SELECT emp_id, first_name, last_name, salary
 FROM employees
 WHERE salary > ANY (
@@ -671,11 +753,22 @@ WHERE salary > ANY (
     WHERE department_id = 50
 );
 
--- 91. Count employees earning above 10000 and at or below 10000
+-- Q91. Count employees earning above 10000 and at or below 10000
 
 SELECT 
     SUM(CASE WHEN salary > 10000 THEN 1 ELSE 0 END) AS sal_above_10000,
     SUM(CASE WHEN salary <= 10000 THEN 1 ELSE 0 END) AS sal_below_equal_10000
 FROM employees;
 
--- 92. Count employees in each salary band
+-- Q92. Count employees in each salary band
+
+SELECT 
+    CASE 
+        WHEN salary < 5000 THEN 'Low (below 5000)'
+        WHEN salary BETWEEN 5000 AND 9999 THEN 'Medium (5000-9999)'
+        ELSE 'High (10000 and above)'
+    END AS salary_band,
+    COUNT(*) AS emp_count
+FROM employees
+GROUP BY salary_band
+ORDER BY MIN(salary);
