@@ -403,7 +403,7 @@ SELECT emp_id,first_name,salary,
 FROM employees;
 
 -- Q66. Find the second-highest salary in each department
-WITH second_highest AS(
+WITH second_highest AS(    --  line 406 (CTE (Common Table Expression))
 SELECT emp_id,first_name,department_id,salary,
     DENSE_RANK() OVER (
         PARTITION BY department_id
@@ -416,7 +416,7 @@ FROM second_highest
 WHERE salary_rank = 2;
 
 -- Q67. Find the top two salary ranks in each job
-WITH top_two_salary_ranks AS (
+WITH top_two_salary_ranks AS (    --  line 406 (CTE (Common Table Expression))
 SELECT emp_id,first_name,department_id,job_id,salary,
     DENSE_RANK() OVER (
         PARTITION BY job_id
