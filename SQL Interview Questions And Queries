@@ -557,3 +557,125 @@ ON e.department_id = d.department_id
 GROUP BY e.emp_id,e.first_name,e.last_name,e.department_id
 HAVING e.salary < ( SELECT AVG(e2.salary) FROM employees e2
 WHERE e.department_id = e2.department_id);
+
+-- 83. Find employees earning the highest salary in each department
+
+SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
+FROM employees e
+WHERE e.salary = (SELECT MAX(d.salary) FROM employees d
+WHERE e.department_id = d.department_id);
+
+
+SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
+FROM employees e
+JOIN departments d
+ON e.department_id = d.department_id
+GROUP BY e.emp_id,e.first_name
+HAVING e.salary = (SELECT MAX(e2.salary) FROM employees e2
+WHERE e.department_id = e2.department_id );
+
+-- 84. Find employees earning the lowest salary in each department
+
+SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
+FROM employees e
+WHERE e.salary = (SELECT MIN(d.salary) FROM employees d
+WHERE e.department_id = d.department_id);
+
+
+SELECT e.emp_id,e.first_name,e.last_name,e.salary,e.department_id
+FROM employees e
+JOIN departments d
+ON e.department_id = d.department_id
+GROUP BY e.emp_id,e.first_name
+HAVING e.salary = (SELECT MIN(e2.salary) FROM employees e2
+WHERE e.department_id = e2.department_id );
+
+-- 85. Find departments having more than five employees
+SELECT d.department_id, d.department_name, COUNT(e.emp_id) AS emp_count
+FROM employees e
+JOIN departments d
+    ON e.department_id = d.department_id
+GROUP BY d.department_id, d.department_name
+HAVING COUNT(e.emp_id) >= 5;
+
+-- 86. Find departments having no employees
+SELECT d.department_id, d.department_name
+FROM departments d
+LEFT JOIN employees e
+    ON d.department_id = e.department_id
+WHERE e.emp_id IS NULL;
+
+-- Using JOIN
+SELECT d.department_id, d.department_name, COUNT(e.emp_id) AS emp_count
+FROM departments d
+LEFT JOIN employees e
+    ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+HAVING COUNT(e.emp_id) = 0;
+
+-- Using NOT EXISTS
+SELECT d.department_id, d.department_name
+FROM departments d
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM employees e
+    WHERE e.department_id = d.department_id
+);
+
+-- 87. Find employees whose department exists in the departments table
+SELECT e.emp_id, e.first_name, e.last_name, e.department_id
+FROM employees e
+JOIN departments d
+    ON e.department_id = d.department_id;
+
+-- Using EXISTS
+SELECT e.emp_id, e.first_name, e.last_name, e.department_id
+FROM employees e
+WHERE EXISTS (
+    SELECT 1
+    FROM departments d
+    WHERE d.department_id = e.department_id
+);
+
+-- 88. Find employees whose department ID does not match any department
+SELECT e.emp_id, e.first_name, e.last_name, e.department_id
+FROM employees e
+LEFT JOIN departments d
+    ON e.department_id = d.department_id
+WHERE d.department_id IS NULL;
+
+-- Using NOT EXISTS
+SELECT e.emp_id, e.first_name, e.last_name, e.department_id
+FROM employees e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM departments d
+    WHERE d.department_id = e.department_id
+);
+
+-- 89. Find employees whose salary is greater than every salary in department 50
+SELECT emp_id, first_name, last_name, salary
+FROM employees
+WHERE salary > ALL (
+    SELECT salary
+    FROM employees
+    WHERE department_id = 50
+);
+
+-- 90. Find employees whose salary is greater than at least one employee in department 50
+SELECT emp_id, first_name, last_name, salary
+FROM employees
+WHERE salary > ANY (
+    SELECT salary
+    FROM employees
+    WHERE department_id = 50
+);
+
+-- 91. Count employees earning above 10000 and at or below 10000
+
+SELECT 
+    SUM(CASE WHEN salary > 10000 THEN 1 ELSE 0 END) AS sal_above_10000,
+    SUM(CASE WHEN salary <= 10000 THEN 1 ELSE 0 END) AS sal_below_equal_10000
+FROM employees;
+
+-- 92. Count employees in each salary band
