@@ -24,9 +24,12 @@ for folder in [LANDING, PROCESSING, ARCHIVE, ERROR, OUTPUT]:
 
 ENV_FILE = PROJECT_FOLDER / ".env"
 load_dotenv(ENV_FILE, override=True)
+#load_dotenv() is a Python function used to load environment variables from a .env file
 
 MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 api_key = os.getenv("GEMINI_API_KEY", "").strip()
+#strip() removes unwanted whitespace from the beginning and end of a string.
+
 
 # 4. INITIALIZE AI CLIENT
 

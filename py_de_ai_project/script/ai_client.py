@@ -14,6 +14,7 @@ def ask_gemini(prompt, max_retries=3):
         )
 
     for attempt in range(1, max_retries + 1):
+        # This loop controls how many times Python to contact Gemini.
         try:
             print(f"Sending request to Gemini (attempt {attempt}/{max_retries})...")
 

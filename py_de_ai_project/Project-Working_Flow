@@ -72,7 +72,7 @@ These libraries are used for:
 Library	Purpose:
 
 pandas -	Reads and analyzes CSV files
-python-dotenv  -	Reads the .env configuration file
+python-dotenv  -   Reads the .env configuration file
 google-genai -	Connects Python to the Gemini API
 pathlib -  Handles file paths; included with Python
 json  -	Handles JSON data; included with Python
@@ -124,8 +124,6 @@ print(f"AI client initialized: {client is not None}")
 print(f"Configured model: {MODEL or 'Not configured'}")
 
 
-
-
 Create your .env file
 File: py_de_ai_project/.env
 GEMINI_API_KEY=YOUR_NEW_GEMINI_API_KEY
@@ -173,8 +171,6 @@ if __name__ == "__main__":
     test_file = Path(__file__).resolve().parent.parent / "landing" / "employee.csv"
     df = load_dataframe(test_file)
     print(df.head())
-
-
 
 
 How it works:
@@ -238,8 +234,6 @@ def profile_dataframe(df, file_name):
     print(f"Duplicate rows: {duplicates}")
 
     return data_types, column_profile, duplicates
-
-
 
 
 Example from your employee dataset
@@ -352,8 +346,6 @@ Return JSON only.
 """
 
     return classification_prompt, schema_prompt
-
-
 
 
 Why use two prompts?
@@ -627,10 +619,8 @@ Suppose you have another dataset named sales.csv.
 run_pipeline("employee.csv")
 
 
-
 to:
 run_pipeline("sales.csv")
-
 
 
 4. Run the same PowerShell command again.
@@ -648,3 +638,16 @@ JSON serialization	prompts.py, ai_client.py
 REST/API integration concepts	Gemini client
 ETL pipeline design	data_profiler.py
 Data quality and governance	Profiler and AI recommendations
+
+
+Run it:
+
+PowerShell from Downloads\Data-Engineering-Python, with .venv active:
+
+powershell
+python py_de_ai_project\script\config.py          # section 1: creates folders, checks key
+python py_de_ai_project\script\loader.py          # section 2 test
+python py_de_ai_project\script\profiler.py        # section 3 test (writes employee_profile.csv)
+python py_de_ai_project\script\prompts.py         # section 4 test
+python py_de_ai_project\script\ai_client.py       # section 5 test (first real Gemini call)
+python py_de_ai_project\script\data_profiler.py   # full pipeline over landing\

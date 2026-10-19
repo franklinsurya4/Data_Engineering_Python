@@ -7,3 +7,10 @@ __pycache__/
 **/data/output/
 **/data/processing/
 **/data/archive/
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]

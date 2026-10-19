@@ -35,6 +35,7 @@ req_file.write_text(REQUIREMENTS, encoding="utf-8")
 print(f"[ok] {req_file}")
 
 env_file = PROJECT_FOLDER / ".env"
+
 if env_file.exists():
     print(f"[skip] {env_file} already exists - key not overwritten")
 else:

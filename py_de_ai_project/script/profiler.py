@@ -4,8 +4,11 @@ from pathlib import Path
 from config import *
 from loader import load_dataframe
 
+
 # 1. DEFINE FUNCTION
+
 def profile_dataframe(df, file_name):
+
     row_count = len(df)
 
     if row_count > 0:
@@ -16,6 +19,7 @@ def profile_dataframe(df, file_name):
         null_percentage = df.isnull().sum()
 
     # 2. CREATE COLUMN PROFILE
+
     column_profile = pd.DataFrame({
         "column_name": df.columns,
         "data_type": df.dtypes.astype(str).values,
@@ -26,10 +30,12 @@ def profile_dataframe(df, file_name):
     })
 
     # 3. SAVE PROFILE TO OUTPUT FOLDER
+
     profile_file = OUTPUT / f"{Path(file_name).stem}_profile.csv"
     column_profile.to_csv(profile_file, index=False)
 
     # 4. RETURN DATA TYPES AND DUPLICATE COUNT
+
     data_types = df.dtypes.astype(str).to_dict()
     duplicates = int(df.duplicated().sum())
 
@@ -37,8 +43,8 @@ def profile_dataframe(df, file_name):
 
     return data_types, column_profile, duplicates
 
-
 # 5. TEST THE FUNCTION
+
 if __name__ == "__main__":
     test_file = LANDING / "employee.csv"
 
