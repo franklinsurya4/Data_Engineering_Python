@@ -1,0 +1,57 @@
+Important SQL functions :
+
+Date and Time functions:
+
+Function	      Purpose
+
+NOW()  -	Current date and time
+CURDATE()  -	Current date
+CURTIME()  -	Current time
+DATE()  -	Extract date from a datetime
+TIME()  -	Extract time from a datetime
+YEAR()  -	Extract year
+MONTH()  -	Extract month number
+DAY()  -	Extract day of month
+HOUR()  -	Extract hour
+MINUTE()  -	Extract minute
+SECOND()  -	Extract second
+
+
+2. Date calculation functions
+
+These are especially useful in interviews.
+
+Function	          Purpose
+
+DATEDIFF(date1, date2)  -	Difference in days
+TIMESTAMPDIFF(unit, start, end)  -	Difference in years, months, days, hours, etc.
+DATE_ADD(date, INTERVAL n unit)  -	Add an interval
+DATE_SUB(date, INTERVAL n unit)  -	Subtract an interval
+LAST_DAY(date)  -	Last day of the month
+DAYNAME(date)  -	Name of the weekday
+MONTHNAME(date)  -	Name of the month
+
+Common SQL window functions:
+
+Function	                      Purpose
+
+ROW_NUMBER()  -	Assigns a unique sequential number to each row
+RANK()  -	Ranks rows; skips ranks after ties
+DENSE_RANK()  -	Ranks rows; does not skip ranks after ties
+LAG()  -	Retrieves a value from a previous row
+LEAD()  -	Retrieves a value from a subsequent row
+SUM() OVER()  -	Calculates a running or window-based sum
+AVG() OVER()  -	Calculates an average across a window
+FIRST_VALUE()  -	Retrieves the first value in a window
+LAST_VALUE()  -	Retrieves the last value in a window
+
+
+Aggregate functions:
+
+Function	      Purpose	Example
+
+COUNT()  -	Counts rows or values	COUNT(*)
+SUM()  -	Adds values	SUM(salary)
+AVG()  -	Calculates average	AVG(salary)
+MIN()  -	Finds minimum value	MIN(salary)
+MAX()  -	Finds maximum value	MAX(salary)

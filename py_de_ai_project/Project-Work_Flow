@@ -639,8 +639,12 @@ REST/API integration concepts	Gemini client
 ETL pipeline design	data_profiler.py
 Data quality and governance	Profiler and AI recommendations
 
+<<<<<<< HEAD:py_de_ai_project/Project-Working_Flow
 
 Run it:
+=======
+Run it
+>>>>>>> 6f19535a0484f5d600c7fb851351e4308ac0384c:py_de_ai_project/Project-Work_Flow
 
 PowerShell from Downloads\Data-Engineering-Python, with .venv active:
 
@@ -650,4 +654,8 @@ python py_de_ai_project\script\loader.py          # section 2 test
 python py_de_ai_project\script\profiler.py        # section 3 test (writes employee_profile.csv)
 python py_de_ai_project\script\prompts.py         # section 4 test
 python py_de_ai_project\script\ai_client.py       # section 5 test (first real Gemini call)
+<<<<<<< HEAD:py_de_ai_project/Project-Working_Flow
 python py_de_ai_project\script\data_profiler.py   # full pipeline over landing\
+=======
+python py_de_ai_project\script\data_profiler.py   # full pipeline over landing\
+>>>>>>> 6f19535a0484f5d600c7fb851351e4308ac0384c:py_de_ai_project/Project-Work_Flow
