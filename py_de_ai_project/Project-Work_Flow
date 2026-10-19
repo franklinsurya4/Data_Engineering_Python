@@ -1,105 +1,146 @@
-1. Understand the project architecture:
 
-        Input: employee.csv
-        Raw employee records
-                |
-                V
-        1. loader.py
-        Loads CSV into a Pandas DataFrame
-                |
-                V
-        2. profiler.py
-        Counts nulls, unique values, duplicates and data types
-                |
-                V
-        3. prompts.py
-        Builds instructions and sample data for Gemini
-                |
-                V
-        4. ai_client.py
-        Calls Gemini API and receives recommendations
-                |
-                V
-        5. Output files
-        Profile CSV, governance JSON, schema JSON
+# AI-Powered Employee Data Profiling and Governance Pipeline
 
+## 1. Project Overview
 
-2. Project folder structure:
+This project builds a Python-based data engineering pipeline that analyzes employee CSV data, identifies data quality issues, and uses Google's Gemini API to generate data governance and analytical schema recommendations.
 
-Your project root is:
-C:\Users\S FRANKLIN SURYA\Downloads\Data-Engineering-Python
+The project combines Python, Pandas, JSON, API integration, and ETL concepts.
 
-The recommended structure is:
+### Project Architecture
 
+```text
+Input: employee.csv
+        |
+        v
+1. loader.py
+   Loads CSV into a Pandas DataFrame
+        |
+        v
+2. profiler.py
+   Counts nulls, unique values, duplicates,
+   data types, and missing-value percentages
+        |
+        v
+3. prompts.py
+   Builds instructions and sample data for Gemini
+        |
+        v
+4. ai_client.py
+   Calls Gemini API and receives recommendations
+        |
+        v
+5. data_profiler.py
+   Coordinates the complete pipeline
+        |
+        v
+Output files
+   employee_profile.csv
+   employee_governance.json
+   employee_schema.json
+```
+
+## 2. Project Folder Structure
+
+Project root:
+
+`C:\Users\S FRANKLIN SURYA\Downloads\Data-Engineering-Python`
+
+Recommended structure:
+
+```text
 Data-Engineering-Python/
-│
-├── .venv/
-│
-└── py_de_ai_project/
-    ├── .env
-    ├── landing/
-    │   └── employee.csv
-    ├── data/
-    │   ├── processing/
-    │   ├── archive/
-    │   ├── error/
-    │   └── output/
-    │
-    └── script/
-        ├── config.py
-        ├── loader.py
-        ├── profiler.py
-        ├── prompts.py
-        ├── ai_client.py
-        └── data_profiler.py
+|
+|-- .venv/
+|
+|-- py_de_ai_project/
+    |
+    |-- .env
+    |
+    |-- landing/
+    |   |-- employee.csv
+    |
+    |-- data/
+    |   |-- processing/
+    |   |-- archive/
+    |   |-- error/
+    |   |-- output/
+    |
+    |-- script/
+        |-- config.py
+        |-- loader.py
+        |-- profiler.py
+        |-- prompts.py
+        |-- ai_client.py
+        |-- data_profiler.py
+```
 
-landing: where incoming CSV files are placed.
-processing: where files can be staged while processing.
-archive: where successfully processed input files may be stored.
-error: where failed input files may be moved.
-output: where profiling reports and AI recommendations are saved.
-script: contains the Python code.
+### Folder Responsibilities
 
+- `landing/`: Incoming CSV files.
+- `data/processing/`: Files temporarily staged during processing.
+- `data/archive/`: Successfully processed input files, if archiving is implemented.
+- `data/error/`: Failed input files, if error handling moves them here.
+- `data/output/`: Generated profile reports and AI recommendations.
+- `script/`: Python source files.
+- `.env`: Private API configuration. Never commit this file to GitHub.
 
-3. Install the required Python libraries
+**Note:** The current pipeline reads from `landing/` or falls back to `archive/`. It does not automatically move files to `processing/`, `archive/`, or `error/`.
 
-In your existing PowerShell terminal, make sure .venv is active.
+## 3. Install Required Python Libraries
 
-Run: python -m pip install pandas python-dotenv google-genai
+Open PowerShell in the project root and activate the virtual environment:
 
-These libraries are used for:
+```powershell
+cd "C:\Users\S FRANKLIN SURYA\Downloads\Data-Engineering-Python"
 
-Library	Purpose:
+.\.venv\Scripts\Activate.ps1
+```
 
-pandas -	Reads and analyzes CSV files
-python-dotenv  -   Reads the .env configuration file
-google-genai -	Connects Python to the Gemini API
-pathlib -  Handles file paths; included with Python
-json  -	Handles JSON data; included with Python
+Install the required libraries:
 
+```powershell
+python -m pip install pandas python-dotenv google-genai
+```
 
-4. Configure config.py
+### Library Responsibilities
 
-File: py_de_ai_project/script/config.py
+| Library | Purpose |
+|---|---|
+| pandas | Reads CSV files and analyzes data |
+| python-dotenv | Loads environment variables from `.env` |
+| google-genai | Connects Python to Google's Gemini API |
+| pathlib | Handles file and directory paths |
+| json | Reads and writes JSON data |
+| os | Reads environment variables |
+| time | Implements retry delays |
+| sys | Configures Python import paths |
 
-This file defines the project paths, creates the folders, and initializes the Gemini API client.
+`pathlib`, `json`, `os`, `time`, and `sys` are included with Python.
 
+## 4. Configure config.py
+
+File: `py_de_ai_project/script/config.py`
+
+This file defines the project paths, creates the required directories, loads environment variables, and initializes the Gemini API client.
+
+```python
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Project folder: py_de_ai_project
+# Project folders
 SCRIPT_FOLDER = Path(__file__).resolve().parent
 PROJECT_FOLDER = SCRIPT_FOLDER.parent
 
-# Input and processing folders
+# Input and processing directories
 LANDING = PROJECT_FOLDER / "landing"
 PROCESSING = PROJECT_FOLDER / "data" / "processing"
 ARCHIVE = PROJECT_FOLDER / "data" / "archive"
 ERROR = PROJECT_FOLDER / "data" / "error"
 OUTPUT = PROJECT_FOLDER / "data" / "output"
 
-# Create required folders
+# Create required directories
 for folder in [LANDING, PROCESSING, ARCHIVE, ERROR, OUTPUT]:
     folder.mkdir(parents=True, exist_ok=True)
 
@@ -122,24 +163,30 @@ print(f"Environment file exists: {ENV_FILE.exists()}")
 print(f"API key loaded: {bool(api_key)}")
 print(f"AI client initialized: {client is not None}")
 print(f"Configured model: {MODEL or 'Not configured'}")
+```
 
+### Create the .env File
 
-Create your .env file
-File: py_de_ai_project/.env
-GEMINI_API_KEY=YOUR_NEW_GEMINI_API_KEY
+File: `py_de_ai_project/.env`
+
+```dotenv
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 GEMINI_MODEL=YOUR_SUPPORTED_GEMINI_MODEL
+```
 
+Replace the placeholders with your actual API key and a model name supported by your Gemini API account.
 
-Replace both example values with your actual API key and a model name supported by your Gemini API account. Use a newly generated key if the old key you shared previously has not yet been revoked.
-Keep .env private. Never upload it to GitHub or send it to Gemini chat.
+Keep the API key private. If an actual key was exposed previously, revoke it and generate a new one.
 
+Never commit `.env` to GitHub.
 
-5. Create loader.py
+## 5. Create loader.py
 
-File: py_de_ai_project/script/loader.py
+File: `py_de_ai_project/script/loader.py`
 
-The loader reads your input CSV and converts it into a Pandas DataFrame.
+The loader reads the CSV file and converts it into a Pandas DataFrame.
 
+```python
 import pandas as pd
 from pathlib import Path
 
@@ -168,24 +215,30 @@ def load_dataframe(file_path):
 
 
 if __name__ == "__main__":
-    test_file = Path(__file__).resolve().parent.parent / "landing" / "employee.csv"
+    test_file = (
+        Path(__file__).resolve().parent.parent
+        / "landing"
+        / "employee.csv"
+    )
+
     df = load_dataframe(test_file)
     print(df.head())
+```
 
+### How It Works
 
-How it works:
-1. Path(file_path) represents the file path.
-2. exists() checks whether the file exists.
-3. pd.read_csv() reads the data.
-4. df.head() displays the first five rows.
+1. `Path(file_path)` represents the CSV path.
+2. `exists()` checks whether the file exists.
+3. `pd.read_csv()` loads the CSV into a DataFrame.
+4. `df.head()` displays the first five rows.
 
+## 6. Create profiler.py
 
-6. Create profiler.py
+File: `py_de_ai_project/script/profiler.py`
 
-File: py_de_ai_project/script/profiler.py
+This file performs statistical data profiling without using AI.
 
-This file analyzes the dataset without using AI. It creates statistics that help identify data quality issues.
-
+```python
 import pandas as pd
 from pathlib import Path
 from config import OUTPUT
@@ -194,10 +247,10 @@ from config import OUTPUT
 def profile_dataframe(df, file_name):
     row_count = len(df)
 
-    # Count missing values in each column
+    # Count missing values per column
     null_counts = df.isnull().sum()
 
-    # Calculate percentage of missing values
+    # Calculate missing-value percentages
     if row_count > 0:
         null_percentage = (
             null_counts / row_count * 100
@@ -205,7 +258,7 @@ def profile_dataframe(df, file_name):
     else:
         null_percentage = null_counts
 
-    # Create column-level profile
+    # Build column-level profile
     column_profile = pd.DataFrame({
         "column_name": df.columns,
         "data_type": df.dtypes.astype(str).values,
@@ -215,7 +268,7 @@ def profile_dataframe(df, file_name):
         "null_percentage": null_percentage.values
     })
 
-    # Count complete duplicate rows
+    # Count duplicate rows
     duplicates = int(df.duplicated().sum())
 
     # Save profile report
@@ -225,7 +278,7 @@ def profile_dataframe(df, file_name):
 
     column_profile.to_csv(profile_file, index=False)
 
-    # Return information needed by the AI prompts
+    # Return data types, profile and duplicate count
     data_types = df.dtypes.astype(str).to_dict()
 
     print(f"Profile saved to: {profile_file}")
@@ -236,28 +289,58 @@ def profile_dataframe(df, file_name):
     return data_types, column_profile, duplicates
 
 
-Example from your employee dataset
-Your earlier run showed:
-- Total records: 3000
+if __name__ == "__main__":
+    from loader import load_dataframe
+
+    project_folder = Path(__file__).resolve().parent.parent
+    input_file = project_folder / "landing" / "employee.csv"
+
+    df = load_dataframe(input_file)
+    profile_dataframe(df, input_file.name)
+```
+
+### Metrics Calculated
+
+- `column_name`: Name of each column.
+- `data_type`: Pandas data type.
+- `null_count`: Number of missing values.
+- `actual_count`: Total number of rows.
+- `unique_count`: Number of distinct non-null values.
+- `null_percentage`: Percentage of rows with missing values.
+- `duplicates`: Number of completely duplicated rows, printed separately.
+
+The `unique_count` metric excludes missing values by default.
+
+### Example from an Earlier Employee Dataset
+
+Previously observed results included:
+
+- Total records: 3,000
 - Total columns: 7
 - Duplicate rows: 0
-- Missing EmployeeID values: 7
-- Missing ManagerID values: 1037
-The profiler calculates these statistics from the data. Gemini then uses them to recommend what to investigate.
+- Missing `EmployeeID` values: 7
+- Missing `ManagerID` values: 1,037
 
+These are example results from an earlier run, not values hardcoded into the profiler.
 
-7. Create prompts.py
+## 7. Create prompts.py
 
-File: py_de_ai_project/script/prompts.py
+File: `py_de_ai_project/script/prompts.py`
 
-This file prepares the questions and data context sent to Gemini.
+This module prepares the dataset context and builds two separate prompts for Gemini.
 
+```python
 import json
 
-def build_prompts(file_name, df, data_types,
-                  column_profile, duplicates):
 
-    # Use only a small sample, not the full dataset
+def build_prompts(
+    file_name,
+    df,
+    data_types,
+    column_profile,
+    duplicates
+):
+    # Send a small sample rather than the entire dataset
     sample_json = df.head(10).astype(str).to_json(
         orient="records",
         indent=2,
@@ -309,7 +392,7 @@ Tasks:
 2. Identify potential PII columns.
 3. Identify potentially confidential columns.
 4. Recommend automated data quality rules.
-5. Explain any assumptions and uncertainty.
+5. Explain assumptions and uncertainty.
 
 Return a valid JSON object with these keys:
 data_governance_domain,
@@ -346,19 +429,24 @@ Return JSON only.
 """
 
     return classification_prompt, schema_prompt
+```
 
+### Why Use Two Prompts?
 
-Why use two prompts?
-- The classification prompt asks about governance and sensitive data.
-- The schema prompt asks about data modeling and constraints.
-Separating these tasks makes the output easier to review and maintain.
+- **Classification prompt:** Focuses on business domain, PII, confidentiality, and governance.
+- **Schema prompt:** Focuses on analytical modeling, key candidates, and validation constraints.
 
+The separation makes the results easier to understand and maintain.
 
-8. Create ai_client.py
+**Privacy note:** The sample records and column profile are sent to the Gemini API. Review the dataset for personal, confidential, or sensitive information before sending any data externally. Use synthetic or properly anonymized records when appropriate.
 
-File: py_de_ai_project/script/ai_client.py
-This file connects to Gemini, sends the prompts, retries temporary errors, and checks whether the response is valid JSON.
+## 8. Create ai_client.py
 
+File: `py_de_ai_project/script/ai_client.py`
+
+This file calls Gemini, retries selected temporary failures, and parses JSON responses.
+
+```python
 import json
 import time
 
@@ -368,13 +456,14 @@ from config import client, MODEL, PROJECT_FOLDER
 def ask_gemini(prompt, max_retries=3):
     if client is None:
         raise RuntimeError(
-            f"Gemini API client is not initialized. "
+            "Gemini API client is not initialized. "
             f"Check your .env file at {PROJECT_FOLDER / '.env'}"
         )
 
     if not MODEL:
         raise RuntimeError(
-            "GEMINI_MODEL is empty. Configure it in your .env file."
+            "GEMINI_MODEL is empty. "
+            "Configure it in your .env file."
         )
 
     for attempt in range(1, max_retries + 1):
@@ -390,7 +479,9 @@ def ask_gemini(prompt, max_retries=3):
             )
 
             if not response.text:
-                raise RuntimeError("Gemini returned an empty response.")
+                raise RuntimeError(
+                    "Gemini returned an empty response."
+                )
 
             return response.text
 
@@ -415,17 +506,19 @@ def ask_gemini(prompt, max_retries=3):
                 ) from error
 
             wait_seconds = attempt * 5
+
             print(
-                f"Temporary service or quota issue. "
+                "Temporary service or quota issue. "
                 f"Retrying in {wait_seconds} seconds..."
             )
+
             time.sleep(wait_seconds)
 
 
 def parse_json_response(response_text):
-    # Remove optional Markdown code fences
     cleaned = response_text.strip()
 
+    # Remove optional Markdown code fences
     if cleaned.startswith("```"):
         lines = cleaned.splitlines()
 
@@ -440,24 +533,35 @@ def parse_json_response(response_text):
         if cleaned.lower().startswith("json"):
             cleaned = cleaned[4:].strip()
 
-    # Raise an error if Gemini did not return valid JSON
+    # Raises JSONDecodeError if invalid JSON is returned
     return json.loads(cleaned)
 
 
-Important: A working client only confirms that the client was initialized. API calls can still fail because of an unsupported model, quota limits, network errors, or temporary service issues.
+if __name__ == "__main__":
+    print("Gemini client module loaded.")
+    print(f"Client initialized: {client is not None}")
+    print(f"Model configured: {bool(MODEL)}")
+```
 
+### Important Notes
 
-9. Create data_profiler.py — the main pipeline
+- Client initialization does not guarantee that API requests will succeed.
+- The model name must be supported by your API account.
+- API quota limits, network issues, and service errors can prevent requests.
+- `ai_client.py` tests configuration when run directly; it does not send a Gemini request unless `ask_gemini()` is called.
 
-This is the main file that connects all the other Python files. You run this file to process your CSV from beginning to end.
+## 9. Create data_profiler.py
 
-File: py_de_ai_project/script/data_profiler.py
+File: `py_de_ai_project/script/data_profiler.py`
 
+This is the main entry point that connects all modules and runs the complete pipeline.
+
+```python
 import json
 import sys
 from pathlib import Path
 
-# Allow imports from this script folder
+# Make the script directory available for imports
 SCRIPT_FOLDER = Path(__file__).resolve().parent
 
 if str(SCRIPT_FOLDER) not in sys.path:
@@ -483,10 +587,10 @@ def save_json(data, output_file):
 
 
 def run_pipeline(file_name="employee.csv"):
-    # 1. Find the input file
+    # 1. Locate the input file
     input_file = LANDING / file_name
 
-    # Allow archived files to be used for testing
+    # Fall back to archive if the file is not in landing
     if not input_file.exists():
         archived_file = ARCHIVE / file_name
 
@@ -502,7 +606,7 @@ def run_pipeline(file_name="employee.csv"):
     # 2. Load CSV
     df = load_dataframe(input_file)
 
-    # 3. Generate data profile
+    # 3. Generate statistical profile
     data_types, column_profile, duplicates = profile_dataframe(
         df,
         input_file.name
@@ -517,17 +621,19 @@ def run_pipeline(file_name="employee.csv"):
         duplicates
     )
 
-    # 5. Ask Gemini for governance recommendations
+    # 5. Request governance recommendations
     print("\n--- Gemini: Data Governance Classification ---")
+
     classification_text = ask_gemini(classification_prompt)
     classification_result = parse_json_response(classification_text)
 
-    # 6. Ask Gemini for schema recommendations
+    # 6. Request schema recommendations
     print("\n--- Gemini: Analytical Schema ---")
+
     schema_text = ask_gemini(schema_prompt)
     schema_result = parse_json_response(schema_text)
 
-    # 7. Save AI results as JSON
+    # 7. Save AI results
     classification_file = (
         OUTPUT / f"{input_file.stem}_governance.json"
     )
@@ -539,7 +645,7 @@ def run_pipeline(file_name="employee.csv"):
     save_json(classification_result, classification_file)
     save_json(schema_result, schema_file)
 
-    # 8. Print a short summary
+    # 8. Print summary
     print("\n========== PIPELINE SUMMARY ==========")
     print(f"Input file: {input_file.name}")
     print(f"Rows analyzed: {len(df)}")
@@ -556,100 +662,56 @@ if __name__ == "__main__":
         print("\nPIPELINE FAILED")
         print(f"Reason: {error}")
         raise
+```
 
+### How the Main Pipeline Works
 
-How data_profiler.py works
+1. Finds `employee.csv` in `landing/`, or falls back to `archive/`.
+2. Loads the CSV into a Pandas DataFrame.
+3. Calculates data quality statistics.
+4. Builds the two AI prompts.
+5. Sends two requests to Gemini.
+6. Parses the responses as JSON.
+7. Saves the governance and schema recommendations.
+8. Prints a pipeline summary.
 
-1. Finds employee.csv in landing or, if absent, archive.
-2. Loads the data into Pandas.
-3. Creates the column-level profile CSV.
-4. Builds the two prompts using prompts.py.
-5. Calls Gemini twice: once for governance and once for schema recommendations.
-6. Converts the responses to JSON and saves them in data/output.
-This version deliberately does not move, archive, or delete the source file. That makes it safer to test while learning.
+This version deliberately does not move, archive, or delete the input CSV. That makes it safer for initial testing.
 
+## 10. Run the Complete Project
 
-10. Run the complete project
+### Step 1 — Open the project root
 
-Open PowerShell and execute these commands in order.
-
-Step 1 — Go to your project root
+```powershell
 cd "C:\Users\S FRANKLIN SURYA\Downloads\Data-Engineering-Python"
+```
 
+### Step 2 — Activate the virtual environment
 
-Step 2 — Activate the virtual environment
+```powershell
 .\.venv\Scripts\Activate.ps1
+```
 
-Step 3 — Check your input file
-Make sure this file exists:
+### Step 3 — Verify the input file
+
+Confirm that this file exists:
+
+```text
 py_de_ai_project\landing\employee.csv
+```
 
-If your file is currently in data\archive, the main pipeline can also read it from there.
+The pipeline can also read the file from `py_de_ai_project\data\archive\` if it is absent from `landing/`.
 
-Step 4 — Run the complete pipeline
+### Step 4 — Run the complete pipeline
+
+```powershell
 python py_de_ai_project\script\data_profiler.py
+```
 
-The first run may take some time because the program makes two Gemini API requests.
+The first run may take some time because it sends two Gemini API requests.
 
+### Optional: Test individual components
 
-11. Expected output files
-
-After a successful run, your output folder should contain:
-employee_profile.csv
-Statistical profile: data types, null counts, unique values and missing-value percentages.
-
-employee_governance.json
-AI recommendations for the business domain, PII, confidential columns and data quality rules.
-
-employee_schema.json
-AI recommendations for analytical schema, key candidates and constraints.
-
-
-Location: py_de_ai_project\data\output\
-
-These JSON files are generated by the new pipeline code above; they won't appear until you run it successfully.
-
-
-12. How to use this with a different CSV file
-
-Suppose you have another dataset named sales.csv.
-1. Place it in py_de_ai_project\landing\.
-2. Open data_profiler.py.
-3. At the bottom, change:
-run_pipeline("employee.csv")
-
-
-to:
-run_pipeline("sales.csv")
-
-
-4. Run the same PowerShell command again.
-
-The profiler will analyze the new columns, and Gemini will recommend relevant governance checks and an analytical schema. Your CSV must contain meaningful column names and data for useful recommendations.
-
-
-13. What you are learning as a Data Engineer
-
-Skill	Where you use it
-Python functions and modules	All script files
-File handling and paths	config.py, loader.py
-Pandas and data analysis	profiler.py
-JSON serialization	prompts.py, ai_client.py
-REST/API integration concepts	Gemini client
-ETL pipeline design	data_profiler.py
-Data quality and governance	Profiler and AI recommendations
-## Run it
-
-<<<<<<< HEAD
-<<<<<<< HEAD:py_de_ai_project/Project-Working_Flow
-
-Run it:
-=======
-Run it
->>>>>>> 6f19535a0484f5d600c7fb851351e4308ac0384c:py_de_ai_project/Project-Work_Flow
-=======
-PowerShell from `Downloads\Data-Engineering-Python`, with `.venv` active:
->>>>>>> origin/main
+Run these commands one at a time:
 
 ```powershell
 python py_de_ai_project\script\config.py
@@ -657,21 +719,90 @@ python py_de_ai_project\script\loader.py
 python py_de_ai_project\script\profiler.py
 python py_de_ai_project\script\prompts.py
 python py_de_ai_project\script\ai_client.py
+```
+
+Running `prompts.py` directly only defines the prompt-building function; it does not run the entire pipeline.
+
+## 11. Expected Output Files
+
+Location:
+
+`py_de_ai_project\data\output\`
+
+| File | Contents |
+|---|---|
+| `employee_profile.csv` | Column data types, missing counts, unique counts, and missing percentages |
+| `employee_governance.json` | AI-generated business domain, potential PII, confidentiality considerations, and data quality recommendations |
+| `employee_schema.json` | AI-generated analytical schema, primary/foreign key candidates, and constraints |
+
+These reports are generated when the corresponding steps run successfully. The JSON reports will not exist until the complete pipeline successfully receives and parses both Gemini responses.
+
+## 12. Use a Different CSV File
+
+Suppose you have a dataset named `sales.csv`.
+
+1. Place it in `py_de_ai_project\landing\`.
+2. Open `data_profiler.py`.
+3. Change the final call from:
+
+```python
+run_pipeline("employee.csv")
+```
+
+to:
+
+```python
+run_pipeline("sales.csv")
+```
+
+4. Run the pipeline again:
+
+```powershell
 python py_de_ai_project\script\data_profiler.py
 ```
 
-<<<<<<< HEAD
-powershell
-python py_de_ai_project\script\config.py          # section 1: creates folders, checks key
-python py_de_ai_project\script\loader.py          # section 2 test
-python py_de_ai_project\script\profiler.py        # section 3 test (writes employee_profile.csv)
-python py_de_ai_project\script\prompts.py         # section 4 test
-python py_de_ai_project\script\ai_client.py       # section 5 test (first real Gemini call)
-<<<<<<< HEAD:py_de_ai_project/Project-Working_Flow
-python py_de_ai_project\script\data_profiler.py   # full pipeline over landing\
-=======
-python py_de_ai_project\script\data_profiler.py   # full pipeline over landing\
->>>>>>> 6f19535a0484f5d600c7fb851351e4308ac0384c:py_de_ai_project/Project-Work_Flow
-=======
-The last command runs the complete data profiling pipeline.
->>>>>>> origin/main
+The pipeline will generate reports using the new filename, such as:
+
+- `sales_profile.csv`
+- `sales_governance.json`
+- `sales_schema.json`
+
+The quality of the AI recommendations depends on the column names, sample data, and context provided.
+
+## 13. Data Engineering Skills Practiced
+
+| Skill | Where It Is Used |
+|---|---|
+| Python functions and modules | All script files |
+| File handling and paths | `config.py`, `loader.py` |
+| Pandas data analysis | `loader.py`, `profiler.py` |
+| JSON serialization | `prompts.py`, `ai_client.py`, `data_profiler.py` |
+| Environment variables and secrets | `config.py`, `.env` |
+| API integration | `ai_client.py` |
+| Retry handling | `ai_client.py` |
+| ETL pipeline design | `data_profiler.py` |
+| Data quality and governance | `profiler.py`, AI recommendations |
+| Analytical data modeling | `prompts.py`, schema recommendations |
+
+## 14. Important Production Improvements
+
+Before using this project with real employee data in a production environment, consider implementing:
+
+1. **Privacy protection:** Avoid sending raw personal information to external AI services unless authorized.
+2. **Structured logging:** Replace print statements with Python's `logging` module.
+3. **Input validation:** Validate required columns, encodings, and expected data types.
+4. **API error handling:** Handle quota limits, malformed responses, and network failures.
+5. **Data quality rules:** Turn recommendations into deterministic validation checks.
+6. **Configuration validation:** Check that the API key and model are configured before processing.
+7. **Automated tests:** Add unit tests for loading, profiling, prompt creation, and JSON parsing.
+8. **Pipeline orchestration:** Consider scheduling and monitoring tools when the pipeline grows.
+9. **File lifecycle management:** Implement explicit archive and error-folder workflows if required.
+10. **Secret management:** Use a secure secrets manager for production rather than committing credentials.
+
+## Final Summary
+
+This project demonstrates an end-to-end data profiling workflow:
+
+**CSV ingestion → Statistical profiling → Prompt generation → Gemini API integration → Governance and schema reports**
+
+The statistical profile is calculated by Python and Pandas. Gemini supplies recommendations that should be reviewed and validated before they are treated as business rules or schema decisions.
