@@ -648,15 +648,17 @@ JSON serialization	prompts.py, ai_client.py
 REST/API integration concepts	Gemini client
 ETL pipeline design	data_profiler.py
 Data quality and governance	Profiler and AI recommendations
+## Run it
 
-Run it
+PowerShell from `Downloads\Data-Engineering-Python`, with `.venv` active:
 
-PowerShell from Downloads\Data-Engineering-Python, with .venv active:
+```powershell
+python py_de_ai_project\script\config.py
+python py_de_ai_project\script\loader.py
+python py_de_ai_project\script\profiler.py
+python py_de_ai_project\script\prompts.py
+python py_de_ai_project\script\ai_client.py
+python py_de_ai_project\script\data_profiler.py
+```
 
-powershell
-python py_de_ai_project\script\config.py          # section 1: creates folders, checks key
-python py_de_ai_project\script\loader.py          # section 2 test
-python py_de_ai_project\script\profiler.py        # section 3 test (writes employee_profile.csv)
-python py_de_ai_project\script\prompts.py         # section 4 test
-python py_de_ai_project\script\ai_client.py       # section 5 test (first real Gemini call)
-python py_de_ai_project\script\data_profiler.py   # full pipeline over landing\
+The last command runs the complete data profiling pipeline.
