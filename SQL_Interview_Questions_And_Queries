@@ -1,5 +1,11 @@
 USE Franklin_employee_practice_db;
 
+SHOW COLUMN FROM employees;
+SHOW COLUMN FROM departments;
+SHOW COLUMN FROM jobs;
+SHOW COLUMN FROM locations;
+
+
 -- Q1. Display all employees
 
 SELECT * FROM employees;
@@ -772,3 +778,88 @@ SELECT
 FROM employees
 GROUP BY salary_band
 ORDER BY MIN(salary);
+
+-- 93. Find the percentage of employees in each department
+
+SELECT department_id,
+	   COUNT(employee_id) AS emp_count,
+       ROUND( Count(*) * 100.0 / (SELECT COUNT(*) FROM employees ) ,2 ) 
+		AS emp_percentage
+FROM employees
+GROUP BY department_id
+ORDER BY emp_percentage DESC;
+
+-- 94. Find departments where average salary is above 8000
+
+SELECT
+    e.department_id,
+    d.department_name,
+    ROUND(AVG(e.salary), 2) AS avg_salary
+FROM departments d
+LEFT JOIN employees e
+    ON e.department_id = d.department_id
+GROUP BY e.department_id, d.department_id, d.department_name
+HAVING AVG(e.salary) > 8000
+ORDER BY avg_salary DESC;
+
+-- 95. Find jobs with more than three employees
+
+SELECT j.job_id,j.job_title,COUNT(e.employee_id) AS employee_count
+FROM jobs j
+JOIN employees e
+ON e.job_id=j.job_id
+GROUP BY j.job_id,j.job_title
+HAVING COUNT(e.employee_id) > 3
+ORDER BY employee_count DESC;
+
+-- 96. Find employees whose salary is outside their job's salary range
+
+SELECT e.employee_id,e.first_name,e.salary,j.min_salary,j.max_salary
+FROM employees e
+JOIN jobs j
+ON e.job_id=j.job_id
+GROUP BY e.employee_id,e.first_name
+HAVING e.salary < j.min_salary OR 
+	   e.salary > j.max_salary;
+
+-- 97. Find employees whose salary equals their job's maximum salary
+
+SELECT e.employee_id,e.first_name,e.salary,j.max_salary
+FROM employees e
+JOIN jobs j
+ON e.job_id=j.job_id
+GROUP BY e.employee_id
+HAVING e.salary=j.max_salary;
+
+-- 98. Find employees whose salary equals their job's minimum salary
+
+SELECT e.employee_id,e.first_name,e.salary,j.min_salary
+FROM employees e
+JOIN jobs j
+ON e.job_id=j.job_id
+GROUP BY e.employee_id
+HAVING e.salary=j.min_salary;
+
+-- 99. Display employee, department, job, and city
+
+SELECT  e.employee_id, e.first_name, e.last_name,
+    d.department_name, j.job_title, l.city
+FROM employees e
+LEFT JOIN departments d
+    ON e.department_id = d.department_id
+LEFT JOIN jobs j
+    ON e.job_id = j.job_id
+LEFT JOIN locations l
+    ON d.location_id = l.location_id;
+
+-- 100. Count employees in each city
+
+SELECT l.city,COUNT(employee_id) AS emp_count
+FROM locations l
+LEFT JOIN departments d
+	ON l.location_id=d.location_id
+LEFT JOIN employees e
+	ON e.department_id=d.department_id
+GROUP BY l.city
+ORDER BY emp_count DESC;
+
