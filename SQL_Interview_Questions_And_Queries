@@ -863,3 +863,148 @@ LEFT JOIN employees e
 GROUP BY l.city
 ORDER BY emp_count DESC;
 
+-- 101. Find the highest salary in each city
+
+-- SELECT l.city,MAX(e.salary) AS highest_salary
+-- FROM locations l
+-- LEFT JOIN departments d
+-- 	ON l.location_id=d.location_id
+-- LEFT JOIN employees e
+-- 	ON d.department_id=e.department_id
+-- GROUP BY l.city;
+
+-- 102. Find cities with no employees
+
+-- SELECT l.city, COUNT(e.employee_id) AS emp_count
+-- FROM locations l
+-- LEFT JOIN departments d
+--    ON l.location_id = d.location_id
+-- LEFT JOIN employees e
+--    ON d.department_id = e.department_id
+-- GROUP BY l.city
+-- HAVING COUNT(e.employee_id) = 0;
+
+-- 103. Find employees working in a specified city
+
+-- SELECT e.employee_id,e.first_name,l.city
+-- FROM employees e
+-- LEFT JOIN departments d
+-- 	ON e.department_id=d.department_id
+-- LEFT JOIN locations l
+-- 	ON l.location_id=d.location_id
+-- GROUP BY e.employee_id
+-- HAVING l.city='Chennai';
+
+-- 104. Find employees working in departments managed by employee 100
+
+-- SELECT e.employee_id,e.first_name,d.department_name,d.manager_id
+-- FROM employees e
+-- LEFT JOIN departments d
+-- 	ON e.department_id=d.department_id
+-- GROUP BY e.employee_id
+-- HAVING d.manager_id = 100;
+
+-- 105. Display each department manager's name
+
+-- SELECT d.department_id,d.department_name,
+-- 	   e.first_name AS manager_name
+-- FROM departments d
+-- LEFT JOIN employees e
+-- 	ON d.manager_id=e.employee_id
+-- GROUP BY d.department_id;
+
+-- 106. Find employees who are also department managers
+
+-- SELECT e.employee_id, e.first_name, e.last_name
+-- FROM employees e
+-- JOIN departments d
+--     ON e.employee_id = d.manager_id;
+
+-- 107. Find employees who are not department managers
+
+-- SELECT e.employee_id,e.first_name
+-- FROM employees e
+-- WHERE NOT EXISTS(
+-- 	SELECT 1 
+--     FROM departments d
+--     WHERE e.employee_id=d.manager_id
+-- );
+
+-- using joins:
+
+-- SELECT e.employee_id, e.first_name, e.last_name
+-- FROM employees e
+-- LEFT JOIN departments d
+--    ON e.employee_id = d.manager_id
+-- WHERE d.manager_id IS NULL;
+
+-- 108. Find managers with at least five direct reports
+
+-- using self join
+
+-- SELECT m.employee_id AS manager_id,
+-- 	   m.first_name AS manager_name,
+-- 	   COUNT(e.employee_id) AS direct_reports_count
+-- FROM employees m
+-- JOIN employees e
+-- 	ON m.employee_id=e.manager_id
+-- GROUP BY m.employee_id
+-- HAVING COUNT(e.employee_id) >= 5;
+
+-- 109. Find employees who earn more than their manager
+
+-- using self join
+
+-- SELECT
+--    e.employee_id,
+--    e.first_name AS employee_name,
+--    e.salary AS employee_salary,
+--    m.first_name AS manager_name,
+--    m.salary AS manager_salary
+-- FROM employees e
+-- JOIN employees m
+--    ON e.manager_id = m.employee_id
+-- WHERE e.salary > m.salary;
+
+-- 110. Find employees who earn less than their manager
+
+-- using self join
+
+-- SELECT
+--    e.employee_id,
+--    e.first_name AS employee_name,
+--    e.salary AS employee_salary,
+--    m.first_name AS manager_name,
+--    m.salary AS manager_salary
+-- FROM employees e
+-- JOIN employees m
+--    ON e.manager_id = m.employee_id
+-- WHERE e.salary < m.salary;
+
+-- 111. Find the salary difference between each employee and manager
+
+-- using self join
+
+-- SELECT e.employee_id AS employee_id,
+-- 	     e.first_name AS employee_name,
+--       e.salary AS employee_salary,
+--       m.first_name AS manager_name,
+--       m.salary AS manager_salary,
+--       e.salary - m.salary AS salary_diff
+-- FROM employees e
+-- JOIN employees m
+-- 	ON e.manager_id=m.employee_id;
+
+-- 112. Find employees hired before their manager
+
+-- using self join
+
+-- SELECT e.employee_id AS employee_id,
+-- 	     e.first_name AS employee_name,
+--       e.hire_date AS emp_hire_date,
+--       m.first_name AS manager_name,
+--       m.hire_date AS mgr_hire_date
+-- FROM employees e
+-- JOIN employees m
+--	ON e.manager_id=m.employee_id
+-- WHERE e.hire_date < m.hire_date;
