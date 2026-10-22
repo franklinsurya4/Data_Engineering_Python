@@ -1,0 +1,278 @@
+CREATE DATABASE IF NOT EXISTS franklin_employee_practice_db;
+
+USE franklin_employee_practice_db;
+
+-- ============================================================
+-- STEP 1: DROP OLD TABLES IF THEY EXIST
+-- WARNING: This deletes the existing tables and their data.
+-- ============================================================
+
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS jobs;
+DROP TABLE IF EXISTS locations;
+
+
+-- ============================================================
+-- STEP 2: CREATE LOCATIONS TABLE
+-- ============================================================
+
+CREATE TABLE locations (
+    location_id INT PRIMARY KEY,
+    street_address VARCHAR(150),
+    postal_code VARCHAR(20),
+    city VARCHAR(100),
+    state_province VARCHAR(100),
+    country_id VARCHAR(10)
+);
+
+
+-- ============================================================
+-- STEP 3: CREATE JOBS TABLE
+-- VARCHAR supports both job codes such as IT_PROG and
+-- numeric-looking IDs such as '5' used in practice queries.
+-- ============================================================
+
+CREATE TABLE jobs (
+    job_id VARCHAR(20) PRIMARY KEY,
+    job_title VARCHAR(100) NOT NULL,
+    min_salary DECIMAL(10,2),
+    max_salary DECIMAL(10,2)
+);
+
+
+-- ============================================================
+-- STEP 4: CREATE DEPARTMENTS TABLE
+-- ============================================================
+
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(100) NOT NULL,
+    manager_id INT,
+    location_id INT
+);
+
+
+-- ============================================================
+-- STEP 5: CREATE EMPLOYEES TABLE
+-- ============================================================
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(150),
+    phone_number VARCHAR(30),
+    hire_date DATE,
+    job_id VARCHAR(20),
+    salary DECIMAL(10,2),
+    commission_pct DECIMAL(5,2),
+    manager_id INT,
+    department_id INT
+);
+
+
+-- ============================================================
+-- STEP 6: INSERT LOCATIONS
+-- ============================================================
+
+INSERT INTO locations
+(location_id, street_address, postal_code, city, state_province, country_id)
+VALUES
+(1000, '10 King Street', '600001', 'Chennai', 'Tamil Nadu', 'IN'),
+(1100, '25 MG Road', '560001', 'Bengaluru', 'Karnataka', 'IN'),
+(1200, '40 HITEC City Road', '500081', 'Hyderabad', 'Telangana', 'IN'),
+(1300, '15 Avinashi Road', '641001', 'Coimbatore', 'Tamil Nadu', 'IN'),
+(1400, '20 Anna Salai', '600002', 'Chennai', 'Tamil Nadu', 'IN'),
+(1500, '12 Residency Road', '560025', 'Bengaluru', 'Karnataka', 'IN'),
+(1600, '8 OMR Road', '603103', 'Kelambakkam', 'Tamil Nadu', 'IN'),
+(1700, '50 Park Street', '700016', 'Kolkata', 'West Bengal', 'IN');
+
+
+-- ============================================================
+-- STEP 7: INSERT JOBS
+-- ============================================================
+
+INSERT INTO jobs
+(job_id, job_title, min_salary, max_salary)
+VALUES
+('IT_PROG', 'Programmer', 3000, 15000),
+('SA_REP', 'Sales Representative', 2500, 12000),
+('AD_VP', 'Administration Vice President', 10000, 30000),
+('AD_ASST', 'Administration Assistant', 3000, 8000),
+('FI_ACCOUNT', 'Finance Accountant', 4000, 14000),
+('HR_REP', 'Human Resources Representative', 3500, 10000),
+('MK_MAN', 'Marketing Manager', 8000, 20000),
+('ST_CLERK', 'Stock Clerk', 2000, 6000),
+('IT_MGR', 'IT Manager', 9000, 25000),
+('5', 'Developer', 3000, 15000),
+('UNKNOWN', 'Unknown Job Test Record', 1000, 5000);
+
+
+-- ============================================================
+-- STEP 8: INSERT DEPARTMENTS
+-- ============================================================
+
+INSERT INTO departments
+(department_id, department_name, manager_id, location_id)
+VALUES
+(10, 'Administration', 100, 1000),
+(20, 'Marketing', 102, 1100),
+(30, 'Purchasing', 105, 1200),
+(40, 'Human Resources', 106, 1300),
+(50, 'IT', 101, 1400),
+(60, 'Finance', 103, 1500),
+(70, 'Sales', 104, 1600),
+(80, 'Research', 107, 1700),
+(90, 'Operations', NULL, 1000),
+(100, 'Customer Support', NULL, 1100);
+
+
+-- ============================================================
+-- STEP 9: INSERT EMPLOYEES
+-- Includes manager relationships, NULLs, duplicate emails,
+-- and selected invalid references for data-quality practice.
+-- ============================================================
+
+INSERT INTO employees
+(employee_id, first_name, last_name, email, phone_number,
+ hire_date, job_id, salary, commission_pct, manager_id, department_id)
+VALUES
+(100, 'Franklin', 'Surya', 'franklin@example.com', '9000000100',
+ '2022-03-14', 'AD_VP', 12000, NULL, NULL, 10),
+
+(101, 'Arun', 'Kumar', 'arun@example.com', '9000000101',
+ '2021-06-10', 'IT_MGR', 15000, NULL, 100, 50),
+
+(102, 'Priya', 'Sharma', 'priya@example.com', '9000000102',
+ '2020-04-15', 'MK_MAN', 11000, NULL, 100, 20),
+
+(103, 'Rahul', 'Raj', 'rahul@example.com', '9000000103',
+ '2022-01-20', 'FI_ACCOUNT', 8500, NULL, 100, 60),
+
+(104, 'Divya', 'Devi', 'divya@example.com', '9000000104',
+ '2023-02-11', 'SA_REP', 7000, 0.10, 102, 70),
+
+(105, 'Karthik', 'Raman', 'karthik@example.com', '9000000105',
+ '2019-08-12', 'IT_PROG', 9500, NULL, 101, 50),
+
+(106, 'Meena', 'Lakshmi', 'meena@example.com', '9000000106',
+ '2021-09-25', 'HR_REP', 6000, NULL, 100, 40),
+
+(107, 'Vijay', 'Anand', 'vijay@example.com', '9000000107',
+ '2020-11-01', 'IT_PROG', 8500, NULL, 101, 50),
+
+(108, 'Anitha', 'Ravi', 'anitha@example.com', '9000000108',
+ '2023-04-05', 'IT_PROG', 6500, NULL, 105, 50),
+
+(109, 'Suresh', 'Babu', 'suresh@example.com', '9000000109',
+ '2018-05-18', 'SA_REP', 9000, 0.15, 104, 70),
+
+(110, 'Kavitha', 'Mohan', 'kavitha@example.com', '9000000110',
+ '2022-07-21', 'FI_ACCOUNT', 7500, NULL, 103, 60),
+
+(111, 'Manoj', 'Kumar', 'manoj@example.com', '9000000111',
+ '2024-01-10', 'ST_CLERK', 3500, NULL, 105, 30),
+
+(112, 'Deepa', 'Sundar', 'deepa@example.com', '9000000112',
+ '2020-12-14', 'AD_ASST', 4500, NULL, 100, 10),
+
+(113, 'Prakash', 'Vel', 'prakash@example.com', '9000000113',
+ '2019-03-08', 'IT_PROG', 9500, NULL, 101, 50),
+
+(114, 'Nisha', 'Priya', 'nisha@example.com', '9000000114',
+ '2023-06-16', 'HR_REP', 5500, NULL, 106, 40),
+
+(115, 'Gokul', 'Raj', 'duplicate@example.com', '9000000115',
+ '2021-02-19', 'SA_REP', 8000, 0.10, 104, 70),
+
+(116, 'Ramesh', 'Kannan', 'duplicate@example.com', '9000000116',
+ '2022-09-09', 'IT_PROG', 7000, NULL, 105, 50),
+
+(117, 'Lakshmi', 'Devi', NULL, '9000000117',
+ '2020-10-22', 'FI_ACCOUNT', 6500, NULL, 103, 60),
+
+(118, 'Saravanan', 'Muthu', 'saravanan@example.com', NULL,
+ '2024-03-01', 'ST_CLERK', 3200, NULL, 111, 30),
+
+(119, 'Pavithra', 'S', 'pavithra@example.com', '9000000119',
+ '2021-12-05', 'IT_PROG', 8000, NULL, 101, 50),
+
+(120, 'Mohan', 'Das', 'mohan@example.com', '9000000120',
+ '2017-06-15', 'AD_VP', 18000, NULL, 100, 10),
+
+(121, 'Swathi', 'R', 'swathi@example.com', '9000000121',
+ '2022-11-11', 'SA_REP', 6000, 0.05, 104, 70),
+
+(122, 'Ajay', 'Kumar', 'ajay@example.com', '9000000122',
+ '2023-08-19', 'IT_PROG', 5000, NULL, 105, 50),
+
+(123, 'Geetha', 'Rani', 'geetha@example.com', '9000000123',
+ '2018-02-02', 'FI_ACCOUNT', 9500, NULL, 103, 60),
+
+(124, 'Bala', 'Murugan', 'bala@example.com', '9000000124',
+ '2020-05-27', 'MK_MAN', 13000, NULL, 102, 20),
+
+(125, 'Rekha', 'Devi', 'rekha@example.com', '9000000125',
+ '2024-06-01', 'AD_ASST', 4000, NULL, 112, 10),
+
+(126, 'Dinesh', 'Raj', 'dinesh@example.com', '9000000126',
+ '2022-10-10', 'IT_PROG', 10000, NULL, 101, 50),
+
+(127, 'Hari', 'Prasad', 'hari@example.com', '9000000127',
+ '2021-04-18', 'SA_REP', 8500, 0.12, 104, 70),
+
+(128, 'Test', 'NoDepartment', 'test@example.com', '9000000128',
+ '2023-12-01', 'IT_PROG', 4000, NULL, 101, NULL),
+
+(129, 'Test', 'InvalidDepartment', 'invalid@example.com', '9000000129',
+ '2024-02-01', 'UNKNOWN', 2500, NULL, 100, 999);
+
+
+-- ============================================================
+-- STEP 10: VERIFY TABLES AND DATA
+-- ============================================================
+
+SHOW TABLES;
+
+SELECT COUNT(*) AS total_locations FROM locations;
+SELECT COUNT(*) AS total_jobs FROM jobs;
+SELECT COUNT(*) AS total_departments FROM departments;
+SELECT COUNT(*) AS total_employees FROM employees;
+
+SELECT * FROM locations;
+SELECT * FROM jobs;
+SELECT * FROM departments;
+SELECT * FROM employees;
+
+
+-- ============================================================
+-- STEP 11: CHECK THE STRUCTURE
+-- ============================================================
+
+DESCRIBE locations;
+DESCRIBE jobs;
+DESCRIBE departments;
+DESCRIBE employees;
+
+
+-- ============================================================
+-- STEP 12: BASIC RELATIONSHIP CHECK
+-- ============================================================
+
+SELECT
+    e.employee_id,
+    e.first_name,
+    e.last_name,
+    e.salary,
+    j.job_title,
+    d.department_name,
+    l.city
+FROM employees e
+LEFT JOIN jobs j
+    ON e.job_id = j.job_id
+LEFT JOIN departments d
+    ON e.department_id = d.department_id
+LEFT JOIN locations l
+    ON d.location_id = l.location_id
+ORDER BY e.employee_id;
