@@ -6,6 +6,9 @@ SHOW COLUMN FROM jobs; //shows schema
 SHOW COLUMN FROM locations; //shows schema
 
 
+Set I  |  Queries 1 to 30
+
+
 -- Q1. Display all employees
 
 SELECT * FROM employees;
@@ -212,6 +215,10 @@ SELECT emp_id,first_name,salary,
         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
     ) AS cum_sal
 FROM employees;
+
+
+Set II  |  Queries 31 to 80
+
 
 -- Q31. Find employees earning the lowest salary
 
@@ -606,6 +613,10 @@ ON d.department_id = e.department_id
 GROUP BY department_id,department_name
 ORDER BY total_payroll DESC
 LIMIT 1;
+
+
+Set III  |  Queries 81 to 130
+
 
 -- Q81. Find employees earning more than their department's average salary
 
@@ -1158,4 +1169,8 @@ ORDER BY emp_count DESC;
 --    employee_id, first_name, last_name,
 --    CONCAT_WS(' ', first_name, last_name) AS full_name
 -- FROM employees;
+
+
+Set IV  |  Queries 131 to 180
+
 
