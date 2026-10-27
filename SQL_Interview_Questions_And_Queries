@@ -1008,3 +1008,75 @@ ORDER BY emp_count DESC;
 -- JOIN employees m
 --	ON e.manager_id=m.employee_id
 -- WHERE e.hire_date < m.hire_date;
+
+-- 113. Find the second-highest distinct salary
+
+-- SELECT MAX(salary) AS second_highest_salary
+-- FROM employees
+-- WHERE salary < (
+--    SELECT MAX(salary)
+--    FROM employees
+-- );
+
+-- 114. Find the fourth-highest distinct salary
+
+-- SELECT DISTINCT salary
+-- FROM employees
+-- WHERE salary IS NOT NULL
+-- ORDER BY salary DESC
+-- LIMIT 1 OFFSET 3;
+
+-- 115. Find the top three highest-paid employees
+
+-- SELECT employee_id,first_name,salary
+-- FROM employees
+-- WHERE salary IS NOT NULL
+-- ORDER BY salary DESC
+-- LIMIT 3;
+
+-- 116. Find the top three highest-paid employees in each department
+
+-- WITH ranked_employees AS (
+--    SELECT employee_id, first_name, last_name, department_id, salary,
+--        DENSE_RANK() OVER (
+--            PARTITION BY department_id
+--            ORDER BY salary DESC
+--        ) AS salary_rank
+--    FROM employees
+-- )
+-- SELECT employee_id, first_name, last_name, department_id, salary, salary_rank
+-- FROM ranked_employees
+-- WHERE salary_rank <= 3
+-- ORDER BY department_id, salary DESC;
+
+-- 117. Rank employees by salary within each department
+
+-- SELECT employee_id, first_name, department_id, salary,
+--    RANK() OVER (
+--        PARTITION BY department_id
+--        ORDER BY salary DESC
+--   ) AS salary_rank
+-- FROM employees;
+
+-- 118. Display each employee's salary and department average
+
+-- SELECT employee_id, first_name, department_id, salary,
+--    AVG(salary) OVER (
+--        PARTITION BY department_id
+--    ) AS department_average_salary
+-- FROM employees;
+
+-- 119. Display each employee's salary and company average
+
+-- SELECT employee_id, first_name, salary,
+--    AVG(salary) OVER () AS company_average_salary
+-- FROM employees;
+
+-- 120. Calculate a running total of salaries by employee ID
+
+-- SELECT employee_id, first_name, salary,
+--    SUM(salary) OVER (
+--        ORDER BY employee_id
+--        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+--    ) AS running_salary_total
+-- FROM employees;
