@@ -1174,3 +1174,5 @@ ORDER BY emp_count DESC;
 Set IV  |  Queries 131 to 180
 
 
+-- 131. Find employees who share the same salary
+
