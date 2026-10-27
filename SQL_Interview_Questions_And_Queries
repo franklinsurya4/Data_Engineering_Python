@@ -1,9 +1,9 @@
 USE Franklin_employee_practice_db;
 
-SHOW COLUMN FROM employees;
-SHOW COLUMN FROM departments;
-SHOW COLUMN FROM jobs;
-SHOW COLUMN FROM locations;
+SHOW COLUMN FROM employees; //shows schema
+SHOW COLUMN FROM departments; //shows schema
+SHOW COLUMN FROM jobs; //shows schema
+SHOW COLUMN FROM locations; //shows schema
 
 
 -- Q1. Display all employees
@@ -1080,3 +1080,82 @@ ORDER BY emp_count DESC;
 --        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
 --    ) AS running_salary_total
 -- FROM employees;
+
+-- 121. Show the previous employee's salary using LAG
+
+-- SELECT employee_id, first_name, salary,
+--    LAG(salary) OVER (
+--        ORDER BY employee_id
+--    ) AS previous_employee_salary
+-- FROM employees;
+
+
+-- 122. Show the next employee's salary using LEAD
+
+-- SELECT employee_id, first_name, salary,
+--    LEAD(salary) OVER (
+--    ) AS next_employee_salary
+-- FROM employees;
+
+-- 123. Find the salary difference from the previous employee
+
+-- WITH salary_comparison AS (
+--    SELECT employee_id, first_name, salary,
+--        LAG(salary) OVER (
+--        ) AS previous_salary
+--    FROM employees
+-- )
+-- SELECT employee_id, first_name, salary, previous_salary,
+--    salary - previous_salary AS salary_difference
+-- FROM salary_comparison;
+
+-- 124. Count employees hired in each year
+
+-- SELECT
+--    YEAR(hire_date) AS hire_year,
+--    COUNT(*) AS employee_count
+-- FROM employees
+-- WHERE hire_date IS NOT NULL
+-- GROUP BY YEAR(hire_date)
+-- ORDER BY hire_year;
+
+-- 125. Find employees hired in the last 365 days
+
+-- SELECT employee_id, first_name, hire_date
+-- FROM employees
+-- WHERE hire_date >= DATE_SUB(CURDATE(), INTERVAL 365 DAY)
+--  AND hire_date <= CURDATE();
+  
+-- 126. Find employees hired during the current year
+
+-- SELECT employee_id, first_name, hire_date
+-- FROM employees
+-- WHERE hire_date >= MAKEDATE(YEAR(CURDATE()), 1)
+--  AND hire_date < MAKEDATE(YEAR(CURDATE()) + 1, 1);
+  
+-- 127. Find employees who have completed at least five years of service
+
+-- SELECT employee_id, first_name, hire_date,
+--    TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) AS years_of_service
+-- FROM employees
+-- WHERE hire_date <= DATE_SUB(CURDATE(), INTERVAL 5 YEAR);
+
+-- 128. Display employee names in uppercase
+
+-- SELECT employee_id, UPPER(first_name) AS upper_first_name,UPPER(last_name) AS upper_last_name
+-- FROM employees;
+
+-- 129. Display employee names and their name lengths
+
+-- SELECT employee_id, first_name,last_name,
+--    CHAR_LENGTH(first_name) AS first_name_length,
+--    CHAR_LENGTH(last_name) AS last_name_length
+-- FROM employees;
+
+-- 130. Combine first and last names into a full name
+
+-- SELECT
+--    employee_id, first_name, last_name,
+--    CONCAT_WS(' ', first_name, last_name) AS full_name
+-- FROM employees;
+
