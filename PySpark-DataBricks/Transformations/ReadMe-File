@@ -1,0 +1,275 @@
+# Retail Sales Analytics & Customer Intelligence Pipeline
+
+## 📌 Project Overview
+
+This project demonstrates an end-to-end retail data analytics pipeline using **PySpark, Databricks, Delta Lake, and Databricks AI/BI Dashboards**.
+
+The project processes retail customer, product, store, order, order-item, and payment data. It applies data cleaning, joins, aggregations, window functions, statistical analysis, and denormalization to generate analytics-ready datasets for business reporting.
+
+## 🎯 Business Objectives
+
+- Analyze total sales revenue and units sold.
+- Identify top-performing products and categories.
+- Compare sales performance across stores and months.
+- Understand customer spending patterns and membership segments.
+- Analyze delivered, cancelled, and pending orders.
+- Build an interactive analytics dashboard in Databricks.
+
+## 🛠️ Technologies Used
+
+- Python
+- PySpark
+- Databricks
+- Delta Lake
+- Databricks SQL
+- Databricks AI/BI Dashboards
+- SQL
+
+## 🏗️ Project Architecture
+
+```text
+Retail Source Data
+       |
+       v
+Data Cleaning and Transformation
+       |
+       v
+PySpark Joins and Data Integration
+       |
+       v
+Aggregations and Window Functions
+       |
+       v
+Statistical Analysis and Denormalization
+       |
+       v
+Curated Delta Tables
+       |
+       v
+Databricks AI/BI Dashboard
+       |
+       v
+Business Insights and Reporting
+```
+
+## 📂 Source DataFrames
+
+| DataFrame | Description |
+|---|---|
+| `customers_df` | Customer details and membership |
+| `products_df` | Product information and prices |
+| `stores_df` | Store names and locations |
+| `orders_df` | Order dates and order statuses |
+| `order_items_df` | Product quantities and discounts |
+| `payments_df` | Payment methods, amounts, and statuses |
+
+## 🔄 PySpark Transformations Implemented
+
+### 1. Joins
+
+- Inner Join
+- Equi Join
+- Left Outer Join
+- Right Outer Join
+- Full Outer Join
+- Left Semi Join
+- Left Anti Join
+- Self Join
+- Cross Join
+- Natural Join using SQL
+
+### 2. GroupBy Aggregations
+
+- `sum()`
+- `count()`
+- `avg()`
+- `min()`
+- `max()`
+
+Used to analyze sales by product category, customer, store, and month.
+
+### 3. Window Functions
+
+- `row_number()`
+- `rank()`
+- `dense_rank()`
+- `lag()`
+- `lead()`
+- Running totals using window frames
+
+### 4. Complex Data Types
+
+- `explode()`
+- `array()`
+- `collect_list()`
+- `map_from_entries()`
+- `struct()`
+
+### 5. Set Operations
+
+- `union()`
+- `unionByName()`
+- `intersect()`
+- `exceptAll()`
+
+### 6. Advanced Aggregations
+
+- `rollup()`
+- `cube()`
+
+### 7. Data Curation Functions
+
+- `coalesce()`
+- `when()` and `otherwise()`
+- `trim()`
+- `isNull()` and `isNotNull()`
+- `lit()`
+- `cast()`
+- `substr()`
+- `to_date()`
+- `concat()`
+
+### 8. Denormalization
+
+Combined related business entities into a wide dataset for reporting and dashboard analysis.
+
+### 9. Statistical Functions
+
+- `corr()`
+- `cov()`
+- `sample()`
+- `freqItems()`
+- `summary()`
+
+## 📊 Analytics and KPIs
+
+The project supports analysis of:
+
+- Total delivered revenue
+- Total delivered orders
+- Total customers served
+- Total units sold
+- Monthly revenue trends
+- Revenue by product category
+- Top-performing products
+- Store-wise sales performance
+- Customer spending segments
+- Order status distribution
+
+## 🗄️ Databricks Delta Tables
+
+The following tables are saved in the `workspace.default` schema.
+
+| Table Name | Description |
+|---|---|
+| `retail_sales_detail` | Combined sales detail across order statuses |
+| `retail_delivered_sales` | Delivered sales records |
+| `retail_customer_summary` | Customer-level sales summary |
+| `retail_monthly_sales` | Monthly sales summary |
+| `retail_store_performance` | Store-level performance summary |
+
+### Verify Tables
+
+```sql
+SHOW TABLES IN workspace.default
+```
+
+### Preview Sales Data
+
+```sql
+SELECT *
+FROM workspace.default.retail_sales_detail
+LIMIT 10
+```
+
+### Check Delivered Revenue
+
+```sql
+SELECT
+    ROUND(SUM(net_revenue), 2) AS total_revenue
+FROM workspace.default.retail_delivered_sales
+```
+
+## 📈 Databricks AI/BI Dashboard
+
+The dashboard can include the following visualizations:
+
+1. **KPI Cards** — Revenue, orders, customers, and units sold.
+2. **Monthly Revenue Trend** — Line chart.
+3. **Category Performance** — Bar chart.
+4. **Top 5 Products** — Bar chart.
+5. **Store Performance** — Bar chart.
+6. **Customer Segmentation** — Pie or bar chart.
+7. **Order Status Analysis** — Bar chart.
+8. **Sales Detail Report** — Table visualization.
+
+### Example: Monthly Revenue Query
+
+```sql
+SELECT
+    order_month,
+    ROUND(SUM(net_revenue), 2) AS monthly_revenue
+FROM workspace.default.retail_delivered_sales
+GROUP BY order_month
+ORDER BY order_month
+```
+
+### Example: Top 5 Products Query
+
+```sql
+SELECT
+    product_name,
+    category,
+    SUM(quantity) AS units_sold,
+    ROUND(SUM(net_revenue), 2) AS total_revenue
+FROM workspace.default.retail_delivered_sales
+GROUP BY product_name, category
+ORDER BY total_revenue DESC
+LIMIT 5
+```
+
+## ▶️ How to Run the Project
+
+1. Open your Databricks workspace.
+2. Create or open a Python notebook.
+3. Create the sample source DataFrames.
+4. Execute the data-cleaning and transformation cells in order.
+5. Create the final sales dataset and analytical summary DataFrames.
+6. Save the results as Delta tables.
+7. Verify the tables using Databricks SQL.
+8. Create a Databricks AI/BI Dashboard.
+9. Add SQL datasets and configure the visualizations.
+10. Publish the dashboard.
+
+## ✅ Data Quality Considerations
+
+- Validate missing values and duplicate records.
+- Check data types for date and numeric columns.
+- Verify join keys and row counts after joins.
+- Use distinct order counts because an order may contain multiple items.
+- Validate revenue calculations and discount handling.
+- Aggregate payment amounts separately when necessary to avoid double counting.
+
+## ⚠️ Important Notes
+
+- This project uses illustrative sample data for learning purposes.
+- `gross_revenue` is calculated as `quantity × unit_price`.
+- `net_revenue` is calculated as `gross_revenue − discount`, assuming `discount` is a monetary amount for the item row.
+- Payment amounts can repeat when payment records are joined to multiple order-item rows. Do not sum joined payment amounts without accounting for the data grain.
+- Execute the notebook cells that create each DataFrame before saving the corresponding Delta table.
+
+## 🚀 Future Enhancements
+
+- Ingest data from CSV, Parquet, or cloud storage.
+- Implement automated data quality checks.
+- Schedule processing using Databricks Jobs.
+- Build incremental data pipelines.
+- Add dashboard filters for date, city, category, and membership.
+- Implement a star schema with fact and dimension tables.
+- Add automated tests for revenue and aggregation accuracy.
+
+## 👨‍💻 Author
+
+**Franklin Surya S**
+
+**Project Focus:** PySpark | Databricks | Data Engineering | SQL Analytics
