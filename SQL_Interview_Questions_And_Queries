@@ -1176,3 +1176,189 @@ Set IV  |  Queries 131 to 180
 
 -- 131. Find employees who share the same salary
 
+-- SELECT e1.employee_id, e1.first_name, e1.salary
+-- FROM employees e1
+-- JOIN employees e2
+--    ON e1.salary = e2.salary
+--   AND e1.employee_id < e2.employee_id
+-- ORDER BY e1.salary DESC;
+
+-- 132. Find employees who share the same first name
+
+-- SELECT e1.employee_id, e1.first_name,
+--       e2.employee_id AS other_employee_id
+-- FROM employees e1
+-- JOIN employees e2
+--    ON e1.first_name = e2.first_name
+--   AND e1.employee_id < e2.employee_id;
+   
+-- 133. Find employees with duplicate email addresses
+
+-- SELECT email, COUNT(*) AS duplicate_count
+-- FROM employees
+-- WHERE email IS NOT NULL
+-- GROUP BY email
+-- HAVING COUNT(*) > 1;
+
+-- 134. Find employees with duplicate full names
+
+-- SELECT first_name, last_name, COUNT(*) AS duplicate_count
+-- FROM employees
+-- GROUP BY first_name, last_name
+-- HAVING COUNT(*) > 1;
+
+-- 135. Find employees who have the same job and salary
+
+-- SELECT e1.employee_id, e1.first_name,
+--       e1.job_id, e1.salary
+-- FROM employees e1
+-- JOIN employees e2
+--    ON e1.job_id = e2.job_id
+--   AND e1.salary = e2.salary
+--   AND e1.employee_id < e2.employee_id;
+   
+-- 136. Find departments with the same department name
+
+-- SELECT department_name, COUNT(*) AS duplicate_count
+-- FROM departments
+-- GROUP BY department_name
+-- HAVING COUNT(*) > 1;
+
+-- 137. Find employees with a missing first name
+
+-- SELECT employee_id, first_name, last_name
+-- FROM employees
+-- WHERE first_name IS NULL
+--   OR TRIM(first_name) = '';
+   
+-- 138. Find employees with a missing email address
+
+-- SELECT employee_id, first_name, email
+-- FROM employees
+-- WHERE email IS NULL
+--   OR TRIM(email) = '';
+
+-- 139. Find employees with a missing salary
+-- SELECT employee_id, first_name, salary
+-- FROM employees
+-- WHERE salary IS NULL;
+
+-- 140. Find employees whose salary is zero or negative
+
+-- SELECT employee_id, first_name, salary
+-- FROM employees
+-- WHERE salary <= 0;
+
+-- 141. Replace NULL commission values with zero in the output
+
+-- SELECT
+--    employee_id,
+--    first_name,
+--    commission_pct,
+--    COALESCE(commission_pct, 0) AS commission_display
+-- FROM employees;
+
+-- 142. Calculate salary plus commission percentage
+
+-- SELECT
+--    first_name,
+--    salary,
+--    commission_pct,
+--    salary + (salary * COALESCE(commission_pct, 0)) AS salary_with_commission
+-- FROM employees;
+
+-- 143. Categorize employees by salary using CASE
+
+-- SELECT
+--    employee_id,
+--    first_name,
+--    salary,
+--    CASE
+--        WHEN salary < 5000 THEN 'Low Salary'
+--        WHEN salary < 10000 THEN 'Medium Salary'
+--        ELSE 'High Salary'
+--    END AS salary_category
+-- FROM employees;
+
+-- 144. Categorize employees by years of service
+
+-- SELECT
+--    employee_id,
+--    first_name,
+--    hire_date,
+--    CASE
+--        WHEN hire_date IS NULL THEN 'Unknown'
+--        WHEN TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) < 2
+--            THEN 'Less than 2 years'
+--        WHEN TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) < 5
+--            THEN '2 to 4 years'
+--        ELSE '5 or more years'
+--    END AS experience_category
+-- FROM employees;
+
+-- 145. Count employees by salary category
+
+-- SELECT
+--   CASE
+--       WHEN salary < 5000 THEN 'Low'
+--       WHEN salary < 10000 THEN 'Medium'
+--        ELSE 'High'
+--    END AS salary_category,
+--    COUNT(*) AS employee_count
+-- FROM employees
+-- WHERE salary IS NOT NULL
+-- GROUP BY
+--    CASE
+--        WHEN salary < 5000 THEN 'Low'
+--        WHEN salary < 10000 THEN 'Medium'
+--        ELSE 'High'
+--    END;
+    
+-- 146. Find the total salary, average salary, and employee count by department
+
+-- SELECT
+--    d.department_name,
+--    COUNT(e.employee_id) AS employee_count,
+--    SUM(e.salary) AS total_salary,
+--    AVG(e.salary) AS average_salary
+-- FROM departments d
+-- LEFT JOIN employees e
+--    ON d.department_id = e.department_id
+-- GROUP BY d.department_id, d.department_name;
+
+-- 147. Find departments whose total salary exceeds 50000
+
+-- SELECT
+--    d.department_name,
+--    SUM(e.salary) AS total_salary
+-- FROM departments d
+-- JOIN employees e
+--    ON d.department_id = e.department_id
+-- GROUP BY d.department_id, d.department_name
+-- HAVING SUM(e.salary) > 50000;
+
+-- 148. Find departments where the minimum salary exceeds 3000
+
+-- SELECT
+--    department_id,
+--    MIN(salary) AS minimum_salary
+-- FROM employees
+-- WHERE department_id IS NOT NULL
+-- GROUP BY department_id
+-- HAVING MIN(salary) > 3000;
+
+-- 149. Find the difference between the highest and lowest salaries
+
+-- SELECT MAX(salary) - MIN(salary) AS salary_difference
+-- FROM employees;
+
+-- 150. Find each department's salary range
+
+-- SELECT
+--    department_id,
+--    MAX(salary) AS highest_salary,
+ --   MIN(salary) AS lowest_salary,
+--    MAX(salary) - MIN(salary) AS salary_range
+-- FROM employees
+-- GROUP BY department_id;
+
