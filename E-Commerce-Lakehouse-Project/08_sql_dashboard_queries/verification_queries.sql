@@ -1,0 +1,11 @@
+DESCRIBE TABLE
+workspace.ecommerce_gold.gold_payment_metrics;
+
+DESCRIBE TABLE
+workspace.ecommerce_gold.gold_shipping_metrics;
+
+DESCRIBE TABLE
+workspace.ecommerce_gold.gold_customer_lifetime_value;
+
+DESCRIBE TABLE
+workspace.ecommerce_gold.gold_category_performance;
