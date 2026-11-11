@@ -1,0 +1,576 @@
+# E-Commerce Lakehouse Project
+
+An end-to-end **E-Commerce Data Engineering Lakehouse** built using **Databricks, PySpark, Delta Lake, Spark Structured Streaming, Auto Loader, and SQL**. This project implements a Medallion Architecture to ingest, clean, validate, transform, and analyze e-commerce data, producing business-ready Gold datasets and an interactive Databricks AI/BI Dashboard.
+
+---
+
+## Project Overview
+
+The project simulates an end-to-end e-commerce analytics platform that processes data from multiple business domains:
+
+- Customers
+- Products
+- Orders
+- Order Items
+- Payments
+- Shipments
+- Inventory Snapshots
+
+The pipeline transforms raw datasets into trusted analytical tables through Bronze, Silver, and Gold layers.
+
+It also includes data quality checks, quarantine handling, referential integrity validation, workflow orchestration, execution logging, checkpoint management, recovery workflows, and final business validation.
+
+## Architecture
+
+```text
+                  E-COMMERCE SOURCE DATA
+                            |
+             Customers | Products | Orders
+           Order Items | Payments | Shipments
+                  Inventory Snapshots
+                            |
+                            v
+                 BRONZE LAYER
+              Raw Data Ingestion
+              Databricks Auto Loader
+              Delta Lake Tables
+              Schema Tracking
+              Checkpoint Management
+                            |
+                            v
+                 SILVER LAYER
+               Data Transformation
+               Data Cleaning
+               Duplicate Handling
+               Null Validation
+               Data Type Validation
+               Business Rule Validation
+               Referential Integrity
+               Quarantine Management
+                            |
+                            v
+                  GOLD LAYER
+                Business Analytics
+                Aggregated Metrics
+                Revenue Analytics
+                Customer Analytics
+                Payment Analytics
+                Shipping Analytics
+                Inventory Analytics
+                            |
+               +------------+------------+
+               |                         |
+               v                         v
+         SQL Analytics             AI/BI Dashboard
+         Business Queries          Executive KPIs
+         Data Validation           Sales Analytics
+         Reconciliation            Customer Analytics
+                                   Payment Analytics
+                                   Operations Analytics
+                            |
+                            v
+                 MONITORING & ORCHESTRATION
+                 Databricks Notebooks
+                 Workflow Execution
+                 Pipeline Logs
+                 Checkpoint Reports
+                 Recovery History
+                 Job Monitoring
+                 Final Validation
+```
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Data engineering development |
+| PySpark | Distributed data processing |
+| Databricks | Lakehouse development platform |
+| Delta Lake | Transactional data storage |
+| Spark Structured Streaming | Streaming data processing |
+| Databricks Auto Loader | Incremental file ingestion |
+| Spark SQL | Data transformations and analytics |
+| Databricks SQL | Analytical queries |
+| Databricks AI/BI | Interactive dashboards |
+| Delta MERGE | Delta table merge operations and audit workflows |
+| Databricks Jobs | Workflow orchestration |
+
+## Dataset Information
+
+The project contains seven primary source datasets.
+
+| Dataset | Description |
+|---|---|
+| `customers.csv` | Customer information |
+| `products.csv` | Product catalog |
+| `orders.csv` | Customer order information |
+| `order_items.csv` | Individual items within orders |
+| `payments.csv` | Payment transactions |
+| `shipments.csv` | Shipment and delivery information |
+| `inventory_snapshots.csv` | Inventory snapshot records |
+
+**Initial dataset volume:** 20,000 records per dataset, approximately 140,000 source records in total.
+
+The actual processed row counts can differ because of validation, filtering, and quarantine operations.
+
+## Medallion Architecture
+
+### 1. Bronze Layer
+
+The Bronze layer stores ingested source data in Delta tables.
+
+Key implementations:
+
+- Databricks Auto Loader ingestion.
+- Incremental file ingestion.
+- Schema tracking.
+- Checkpoint management.
+- Raw data preservation.
+- Dataset-level ingestion monitoring.
+
+Example tables:
+
+```text
+workspace.ecommerce_bronze.customers
+workspace.ecommerce_bronze.products
+workspace.ecommerce_bronze.orders
+workspace.ecommerce_bronze.order_items
+workspace.ecommerce_bronze.payments
+workspace.ecommerce_bronze.shipments
+workspace.ecommerce_bronze.inventory_snapshots
+```
+
+### 2. Silver Layer
+
+The Silver layer contains cleaned and validated datasets.
+
+Key implementations:
+
+- Null value validation.
+- Duplicate detection.
+- Data type and format validation.
+- Business rule validation.
+- Referential integrity checks.
+- Orphan record identification.
+- Invalid record quarantine.
+- Data quality reports.
+- Remediation and reprocessing workflows.
+
+Example tables:
+
+```text
+workspace.ecommerce_silver.silver_customers
+workspace.ecommerce_silver.silver_products
+workspace.ecommerce_silver.silver_orders
+workspace.ecommerce_silver.silver_order_items
+workspace.ecommerce_silver.silver_payments
+workspace.ecommerce_silver.silver_shipments
+workspace.ecommerce_silver.silver_inventory
+```
+
+Additional Silver tables maintain validation reports, quarantine records, relationship checks, and processing audits.
+
+### 3. Gold Layer
+
+The Gold layer contains business-ready analytical datasets.
+
+**Sales and business analytics**
+
+- `gold_daily_sales`
+- `gold_channel_daily_sales`
+- `gold_category_performance`
+- `gold_executive_kpis`
+
+**Customer and product analytics**
+
+- `gold_customer_lifetime_value`
+- `gold_customer_segments`
+- `gold_product_performance`
+
+**Payment analytics**
+
+- `gold_payment_metrics`
+- `gold_payment_method_performance`
+- `gold_order_payment_summary`
+
+**Shipping analytics**
+
+- `gold_shipping_metrics`
+- `gold_carrier_performance`
+- `gold_order_shipping_summary`
+
+**Inventory analytics**
+
+- `gold_inventory_status`
+- `gold_inventory_alerts`
+- `gold_inventory_snapshot_trends`
+- `gold_warehouse_inventory`
+
+These datasets support executive reporting, business analysis, and dashboard visualizations.
+
+## Major Project Features
+
+### Incremental Data Ingestion
+
+- Auto Loader-based ingestion.
+- Checkpoint-based file processing.
+- Schema tracking.
+- Incremental ingestion reports.
+- Dataset-level processing status.
+
+### Data Quality Framework
+
+- Completeness checks.
+- Uniqueness validation.
+- Data type and format validation.
+- Null checks.
+- Duplicate detection.
+- Invalid record quarantine.
+- Data quality summary reports.
+
+### Referential Integrity
+
+Validates relationships between:
+
+- Customers and Orders.
+- Orders and Order Items.
+- Orders and Payments.
+- Orders and Shipments.
+- Products and Order Items.
+- Products and Inventory.
+
+Orphan records and relationship validation results are maintained in dedicated reporting tables.
+
+### Business Rule Validation
+
+Implements business-level validation for e-commerce datasets, including:
+
+- Order validation.
+- Payment validation.
+- Shipment status validation.
+- Product and inventory validation.
+- Invalid record handling.
+
+### Delta Lake Processing
+
+- Delta table storage.
+- Transactional data operations.
+- Delta merge audit reporting.
+- Processing history.
+- Validation and reconciliation reports.
+
+**Implementation note:** The current Delta merge notebook provides an audit workflow; it should not be represented as a fully implemented, change-aware incremental MERGE pipeline.
+
+### Streaming and Checkpoint Management
+
+- Auto Loader checkpoint paths.
+- Schema location management.
+- Checkpoint status reporting.
+- Checkpoint recovery support.
+
+A complete restart and recovery test is still needed to prove stream resumption behavior.
+
+### Workflow Orchestration
+
+A parent notebook coordinates the pipeline execution sequence:
+
+1. Bronze ingestion.
+2. Silver processing.
+3. Delta merge audit.
+4. Data quality validation.
+5. Business rule validation.
+6. Referential integrity validation.
+7. Orphan record handling.
+8. Referential integrity dashboard.
+9. Gold analytics refresh.
+10. Final pipeline validation.
+
+Notebook orchestration uses `dbutils.notebook.run()` with execution parameters and failure handling.
+
+### Logging and Monitoring
+
+Implemented operational reporting includes:
+
+- Pipeline execution logs.
+- Workflow execution reports.
+- Job monitoring reports.
+- Job health summaries.
+- Checkpoint management reports.
+- Pipeline failure reports.
+- Recovery history.
+- Final readiness reports.
+
+## Databricks Workspace Structure
+
+Main workspace directory:
+
+```text
+/Workspace/Data-Enginnering/
+    Data-Engineering-Python/
+        E-Commerce-Lakehouse-Project/
+```
+
+The project is organized into 11 folders covering source data, ingestion, transformation, analytics, dashboards, incremental processing, monitoring, orchestration, and final testing.
+
+Important completed sections include:
+
+```text
+08_dashboard_and_sql_analytics/
+09_incremental_ingestion/
+    01_incremental_bronze_ingestion.ipynb
+    02_incremental_silver_processing.ipynb
+    03_incremental_delta_merge.ipynb
+    04_incremental_gold_refresh.ipynb
+    05_incremental_pipeline_validation.ipynb
+
+10_logging_checkpoints_and_recovery/
+    01_centralized_logging.ipynb
+    02_checkpoint_management.ipynb
+    03_failure_recovery_and_retry.ipynb
+    04_pipeline_error_handling.ipynb
+    05_pipeline_monitoring_dashboard.sql
+
+11_databricks_jobs_and_final_testing/
+    01_job_parameters_and_configuration.ipynb
+    02_workflow_task_configuration.ipynb
+    03_job_scheduling_and_monitoring.ipynb
+    04_end_to_end_pipeline_execution.ipynb
+    05_end_to_end_data_validation.ipynb
+    06_final_project_readiness_report.ipynb
+```
+
+## Databricks Catalog Structure
+
+The project uses the `workspace` catalog.
+
+```text
+workspace
+│
+├── ecommerce_bronze
+│   ├── customers
+│   ├── products
+│   ├── orders
+│   ├── order_items
+│   ├── payments
+│   ├── shipments
+│   └── inventory_snapshots
+│
+├── ecommerce_silver
+│   ├── silver_customers
+│   ├── silver_products
+│   ├── silver_orders
+│   ├── silver_order_items
+│   ├── silver_payments
+│   ├── silver_shipments
+│   ├── silver_inventory
+│   └── validation and quarantine tables
+│
+└── ecommerce_gold
+    ├── gold_daily_sales
+    ├── gold_executive_kpis
+    ├── gold_product_performance
+    ├── gold_customer_lifetime_value
+    ├── gold_customer_segments
+    ├── gold_payment_metrics
+    ├── gold_shipping_metrics
+    ├── gold_inventory_status
+    └── other analytical and operational tables
+```
+
+## Databricks AI/BI Dashboard
+
+The project includes an interactive **E-Commerce Executive Dashboard** built using Gold-layer SQL datasets.
+
+Dashboard sections:
+
+| Dashboard Section | Business Metrics |
+|---|---|
+| Executive Overview | Revenue, orders, customers, AOV |
+| Sales Analytics | Daily sales, channel and category performance |
+| Customer Analytics | Customer segments and lifetime value |
+| Product Analytics | Product performance and sales |
+| Payment Analytics | Payment success, failures, refunds and methods |
+| Shipping Analytics | Delivery, shipment and carrier performance |
+| Inventory Analytics | Stock availability, low stock and inventory value |
+| Data Reliability | Data quality and referential integrity |
+
+Example dashboard datasets:
+
+```sql
+SELECT *
+FROM workspace.ecommerce_gold.gold_executive_kpis;
+
+SELECT *
+FROM workspace.ecommerce_gold.gold_daily_sales;
+
+SELECT *
+FROM workspace.ecommerce_gold.gold_product_performance;
+
+SELECT *
+FROM workspace.ecommerce_gold.gold_payment_metrics;
+
+SELECT *
+FROM workspace.ecommerce_gold.gold_shipping_metrics;
+
+SELECT *
+FROM workspace.ecommerce_gold.gold_inventory_status;
+```
+
+## Pipeline Execution Results
+
+The following results were recorded during the project's final testing.
+
+### Workflow Execution
+
+| Metric | Result |
+|---|---:|
+| Total workflow tasks | 10 |
+| Successful tasks | 10 |
+| Failed tasks | 0 |
+| Skipped tasks | 0 |
+| Task success rate | 100% |
+| Execution duration | Approximately 11.2 minutes |
+
+### End-to-End Testing
+
+| Metric | Result |
+|---|---:|
+| Total tests | 104 |
+| Passed tests | 104 |
+| Failed tests | 0 |
+| Pass rate | 100% |
+| Status | PASSED |
+
+### Final Business Validation
+
+| Metric | Result |
+|---|---:|
+| Total validations | 9 |
+| Passed validations | 9 |
+| Failed validations | 0 |
+| Not tested | 0 |
+| Pass rate | 100% |
+| Status | PASSED |
+
+### Project Readiness Checks
+
+| Metric | Result |
+|---|---:|
+| Total checks | 71 |
+| Passed checks | 71 |
+| Failed checks | 0 |
+| Readiness check score | 100% |
+| Status | CHECKS_PASSED |
+
+**Important:** These are results from the recorded test runs, not a guarantee of production readiness. The configured checks validate the implemented conditions and do not independently prove all production behaviors.
+
+## Setup and Execution
+
+### Prerequisites
+
+- Databricks workspace with an appropriate compute environment.
+- Unity Catalog access.
+- Python and PySpark.
+- Delta Lake support.
+- Access to a Unity Catalog volume.
+- SQL warehouse access for dashboard creation.
+
+### Step 1: Configure the catalog and volume
+
+The project uses:
+
+```python
+CATALOG = "workspace"
+SCHEMA = "default"
+VOLUME = "data_volume"
+
+BASE_PATH = (
+    f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/ecommerce_lakehouse"
+)
+```
+
+### Step 2: Upload source datasets
+
+Upload the seven CSV files to the configured landing directory inside the Unity Catalog volume.
+
+### Step 3: Create schemas
+
+```sql
+CREATE SCHEMA IF NOT EXISTS workspace.ecommerce_bronze;
+
+CREATE SCHEMA IF NOT EXISTS workspace.ecommerce_silver;
+
+CREATE SCHEMA IF NOT EXISTS workspace.ecommerce_gold;
+```
+
+### Step 4: Execute the notebooks
+
+Run the project notebooks in the intended dependency order:
+
+1. Bronze ingestion.
+2. Silver transformation.
+3. Data quality validation.
+4. Business rule validation.
+5. Referential integrity validation.
+6. Gold analytics generation.
+7. Incremental processing and audit workflows.
+8. Logging and checkpoint management.
+9. Workflow orchestration.
+10. End-to-end validation.
+11. Project readiness checks.
+
+Use the parent orchestration notebook when running the complete workflow.
+
+### Step 5: Create the dashboard
+
+Create SQL datasets from the Gold tables in Databricks AI/BI Dashboards, configure the visualizations, and publish the dashboard with appropriate permissions.
+
+## Business Outcomes
+
+This project demonstrates how raw e-commerce data can be transformed into structured business intelligence through a Lakehouse architecture.
+
+It supports:
+
+- Monitoring sales and revenue.
+- Understanding customer purchasing behavior.
+- Evaluating product performance.
+- Tracking payment success and failures.
+- Measuring shipping and delivery performance.
+- Monitoring inventory availability.
+- Identifying data quality and relationship issues.
+- Tracking pipeline execution and validation results.
+
+## Known Limitations and Future Improvements
+
+The following improvements are required before claiming full production readiness:
+
+1. Implement true change-aware incremental Delta MERGE operations with source-to-target reconciliation.
+2. Make Gold refresh selective so that only affected datasets are recomputed.
+3. Integrate centralized logging into every pipeline notebook.
+4. Execute controlled failure and retry tests, including permanent-error handling and idempotency.
+5. Test checkpoint recovery and streaming resumption behavior.
+6. Configure and test actual scheduled Databricks Jobs.
+7. Add automated alerting for failed tasks and data quality failures.
+8. Add automated dashboard refresh and operational monitoring.
+9. Investigate future-dated inventory snapshots and reconcile shipment totals across Gold KPI tables.
+
+## Author
+
+**Franklin Surya S**
+
+Data Engineering | Python | SQL | PySpark | Databricks | Delta Lake
+
+GitHub: [franklinsurya4](https://github.com/franklinsurya4)
+
+---
+
+## Project Summary
+
+An end-to-end e-commerce Lakehouse project demonstrating data ingestion, transformation, validation, analytics, orchestration, monitoring, and dashboard development using modern Databricks and PySpark technologies.
+
+**Architecture:** Medallion Architecture  
+**Processing:** Batch and streaming-oriented ingestion  
+**Storage:** Delta Lake  
+**Analytics:** Spark SQL and Databricks SQL  
+**Visualization:** Databricks AI/BI Dashboard  
+**Validation:** End-to-end tests and business validation
