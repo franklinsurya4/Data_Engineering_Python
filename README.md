@@ -4,6 +4,14 @@ An end-to-end **E-Commerce Data Engineering Lakehouse** built using **Databricks
 
 ---
 
+## Live Dashboard
+
+Explore the published **E-Commerce Executive Dashboard**:
+
+[**View E-Commerce Executive Dashboard on Databricks**](https://dbc-fd9bf9c1-a5aa.cloud.databricks.com/dashboardsv3/01f1dce5bc1f1eafa9a6c13493d9c291/published?o=7474658525893438&f_aac7aac0%7Edaily-revenue-vs-order-count-combo-chart=%257B%2522columns%2522%253A%255B%2522x%2522%255D%252C%2522rows%2522%253A%255B%255B%25222026-12-01T00%253A00%253A00.000Z%2522%255D%255D%252C%2522sourceQueryName%2522%253A%2522combo_primary_2%2522%257D)
+
+*Note: Dashboard access depends on the Databricks workspace permissions and published-dashboard sharing settings.*
+
 ## Project Overview
 
 The project simulates an end-to-end e-commerce analytics platform that processes data from multiple business domains:
