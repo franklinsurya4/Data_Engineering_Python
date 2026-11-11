@@ -31,60 +31,80 @@ It also includes data quality checks, quarantine handling, referential integrity
 ## Architecture
 
 ```text
-                  E-COMMERCE SOURCE DATA
-                            |
-             Customers | Products | Orders
-           Order Items | Payments | Shipments
-                  Inventory Snapshots
-                            |
-                            v
-                 BRONZE LAYER
-              Raw Data Ingestion
-              Databricks Auto Loader
-              Delta Lake Tables
-              Schema Tracking
-              Checkpoint Management
-                            |
-                            v
-                 SILVER LAYER
-               Data Transformation
-               Data Cleaning
-               Duplicate Handling
-               Null Validation
-               Data Type Validation
-               Business Rule Validation
-               Referential Integrity
-               Quarantine Management
-                            |
-                            v
-                  GOLD LAYER
-                Business Analytics
-                Aggregated Metrics
-                Revenue Analytics
-                Customer Analytics
-                Payment Analytics
-                Shipping Analytics
-                Inventory Analytics
-                            |
-               +------------+------------+
-               |                         |
-               v                         v
-         SQL Analytics             AI/BI Dashboard
-         Business Queries          Executive KPIs
-         Data Validation           Sales Analytics
-         Reconciliation            Customer Analytics
-                                   Payment Analytics
-                                   Operations Analytics
-                            |
-                            v
-                 MONITORING & ORCHESTRATION
-                 Databricks Notebooks
-                 Workflow Execution
-                 Pipeline Logs
-                 Checkpoint Reports
-                 Recovery History
-                 Job Monitoring
-                 Final Validation
++------------------------------------------------------------------+
+|                    E-COMMERCE SOURCE DATA                         |
+|                                                                  |
+|  Customers | Products | Orders | Order Items                     |
+|  Payments  | Shipments | Inventory Snapshots                     |
++------------------------------------------------------------------+
+                              |
+                              v
++------------------------------------------------------------------+
+|                         BRONZE LAYER                             |
+|                       Raw Data Ingestion                         |
+|                                                                  |
+|  - Databricks Auto Loader                                        |
+|  - Delta Lake Tables                                             |
+|  - Schema Tracking                                               |
+|  - Checkpoint Management                                         |
++------------------------------------------------------------------+
+                              |
+                              v
++------------------------------------------------------------------+
+|                         SILVER LAYER                             |
+|                    Data Cleaning & Validation                    |
+|                                                                  |
+|  - Data Transformation                                           |
+|  - Duplicate Handling                                            |
+|  - Null Validation                                               |
+|  - Data Type Validation                                          |
+|  - Business Rule Validation                                      |
+|  - Referential Integrity                                         |
+|  - Quarantine Management                                         |
++------------------------------------------------------------------+
+                              |
+                              v
++------------------------------------------------------------------+
+|                          GOLD LAYER                              |
+|                    Business-Ready Analytics                      |
+|                                                                  |
+|  - Revenue Analytics                                             |
+|  - Customer Analytics                                            |
+|  - Product Analytics                                             |
+|  - Payment Analytics                                             |
+|  - Shipping Analytics                                            |
+|  - Inventory Analytics                                           |
+|  - Aggregated Business Metrics                                   |
++------------------------------------------------------------------+
+                              |
+                +-------------+-------------+
+                |                           |
+                v                           v
++-----------------------------+  +-----------------------------+
+|       SQL ANALYTICS         |  |       AI/BI DASHBOARD       |
+|                             |  |                             |
+|  - Business Queries         |  |  - Executive KPIs           |
+|  - Data Validation          |  |  - Sales Analytics           |
+|  - Data Reconciliation      |  |  - Customer Analytics        |
+|  - Analytical Reporting     |  |  - Payment Analytics         |
+|                             |  |  - Operations Analytics      |
++-----------------------------+  +-----------------------------+
+                |                           |
+                +-------------+-------------+
+                              |
+                              v
++------------------------------------------------------------------+
+|                 MONITORING & ORCHESTRATION                       |
+|                                                                  |
+|  - Databricks Notebook Workflows                                 |
+|  - Pipeline Execution Logs                                       |
+|  - Checkpoint Management                                         |
+|  - Recovery History                                              |
+|  - Job Monitoring                                                |
+|  - End-to-End Testing                                            |
+|  - Final Business Validation                                     |
+|  - Project Readiness Reporting                                   |
++------------------------------------------------------------------+
 ```
 
 ## Technology Stack
