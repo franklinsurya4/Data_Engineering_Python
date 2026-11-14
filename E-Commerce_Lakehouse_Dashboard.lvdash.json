@@ -1,0 +1,2159 @@
+{
+  "datasets": [
+    {
+      "name": "c1a3bb26",
+      "displayName": "ds_executive_kpis",
+      "queryLines": [
+        "SELECT *\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis;"
+      ]
+    },
+    {
+      "name": "orders_by_month",
+      "displayName": "Orders by Month",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.ecommerce_gold.gold_daily_sales",
+        "dimensions": [
+          {
+            "name": "order_month",
+            "expr": "DATE_TRUNC('MONTH', order_date)",
+            "displayName": "Order Month"
+          }
+        ],
+        "measures": [
+          {
+            "name": "cancelled_orders",
+            "expr": "SUM(cancelled_orders)",
+            "displayName": "Cancelled Orders"
+          },
+          {
+            "name": "non_cancelled_orders",
+            "expr": "SUM(non_cancelled_orders)",
+            "displayName": "Non-Cancelled Orders"
+          }
+        ]
+      }
+    },
+    {
+      "name": "69766b02",
+      "displayName": "ds_daily_sales",
+      "queryLines": [
+        "SELECT\r\n",
+        "    order_date,\r\n",
+        "    currency,\r\n",
+        "    total_orders,\r\n",
+        "    gross_order_value,\r\n",
+        "    average_order_value\r\n",
+        "FROM workspace.ecommerce_gold.gold_daily_sales\r\n",
+        "ORDER BY order_date;"
+      ]
+    },
+    {
+      "name": "8c234920",
+      "displayName": "ds_payment_status_pie",
+      "queryLines": [
+        "SELECT\r\n",
+        "    'Successful' AS payment_status,\r\n",
+        "    successful_payment_attempts AS payment_count\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    'Failed',\r\n",
+        "    failed_payment_attempts\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    'Pending',\r\n",
+        "    pending_payment_attempts\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    'Refunded',\r\n",
+        "    refunded_payment_attempts\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis;"
+      ]
+    },
+    {
+      "name": "09e54c5f",
+      "displayName": "ds_payment_pivot",
+      "queryLines": [
+        "SELECT\r\n",
+        "    'Payment Attempts' AS metric,\r\n",
+        "    successful_payment_attempts AS successful,\r\n",
+        "    failed_payment_attempts AS failed,\r\n",
+        "    pending_payment_attempts AS pending,\r\n",
+        "    refunded_payment_attempts AS refunded\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis;"
+      ]
+    },
+    {
+      "name": "44a58294",
+      "displayName": "ds_executive_summary_table",
+      "queryLines": [
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    total_orders,\r\n",
+        "    non_cancelled_orders,\r\n",
+        "    cancelled_orders,\r\n",
+        "    unique_purchasing_customers,\r\n",
+        "    gross_order_value,\r\n",
+        "    average_order_value,\r\n",
+        "    order_cancellation_rate,\r\n",
+        "    successful_payment_attempts,\r\n",
+        "    failed_payment_attempts,\r\n",
+        "    pending_payment_attempts,\r\n",
+        "    refunded_payment_attempts,\r\n",
+        "    net_payment_amount,\r\n",
+        "    payment_success_rate,\r\n",
+        "    delivery_rate,\r\n",
+        "    total_products,\r\n",
+        "    total_inventory_units,\r\n",
+        "    available_products,\r\n",
+        "    low_stock_products,\r\n",
+        "    out_of_stock_products,\r\n",
+        "    inventory_availability_rate,\r\n",
+        "    executive_payment_status,\r\n",
+        "    executive_delivery_status,\r\n",
+        "    executive_inventory_status,\r\n",
+        "    generated_at\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis;"
+      ]
+    },
+    {
+      "name": "9ca1785e",
+      "displayName": "ds_executive_summary_table",
+      "queryLines": [
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    total_orders,\r\n",
+        "    non_cancelled_orders,\r\n",
+        "    cancelled_orders,\r\n",
+        "    unique_purchasing_customers,\r\n",
+        "    gross_order_value,\r\n",
+        "    average_order_value,\r\n",
+        "    order_cancellation_rate,\r\n",
+        "    successful_payment_attempts,\r\n",
+        "    failed_payment_attempts,\r\n",
+        "    pending_payment_attempts,\r\n",
+        "    refunded_payment_attempts,\r\n",
+        "    successful_payment_amount,\r\n",
+        "    net_payment_amount,\r\n",
+        "    payment_success_rate,\r\n",
+        "    delivery_rate,\r\n",
+        "    total_products,\r\n",
+        "    total_inventory_units,\r\n",
+        "    available_products,\r\n",
+        "    low_stock_products,\r\n",
+        "    out_of_stock_products,\r\n",
+        "    inventory_availability_rate,\r\n",
+        "    executive_payment_status,\r\n",
+        "    executive_delivery_status,\r\n",
+        "    executive_inventory_status,\r\n",
+        "    generated_at\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis;"
+      ]
+    },
+    {
+      "name": "8e6a2989",
+      "displayName": "ds_daily_sales",
+      "queryLines": [
+        "SELECT\r\n",
+        "    order_date,\r\n",
+        "    gross_order_value\r\n",
+        "FROM workspace.ecommerce_gold.gold_daily_sales\r\n",
+        "ORDER BY order_date;"
+      ]
+    },
+    {
+      "name": "c06de212",
+      "displayName": "workflow_execution_report",
+      "queryLines": [
+        "SELECT\r\n",
+        "    task_name,\r\n",
+        "    pipeline_layer,\r\n",
+        "    start_timestamp,\r\n",
+        "    end_timestamp,\r\n",
+        "    duration_seconds,\r\n",
+        "    execution_status,\r\n",
+        "    run_id\r\n",
+        "FROM workspace.ecommerce_gold.workflow_execution_report\r\n",
+        "WHERE task_name IS NOT NULL;"
+      ]
+    },
+    {
+      "name": "a0f313f2",
+      "displayName": "revenue_by_state",
+      "queryLines": [
+        "SELECT\r\n",
+        "    c.state AS state,\r\n",
+        "    o.currency AS currency,\r\n",
+        "    COUNT(DISTINCT o.order_id) AS total_orders,\r\n",
+        "    ROUND(SUM(o.order_total), 2) AS total_revenue,\r\n",
+        "    ROUND(AVG(o.order_total), 2) AS average_order_value\r\n",
+        "FROM workspace.ecommerce_silver.silver_customers c\r\n",
+        "INNER JOIN workspace.ecommerce_silver.silver_orders o\r\n",
+        "    ON c.customer_id = o.customer_id\r\n",
+        "WHERE\r\n",
+        "    c.state IS NOT NULL\r\n",
+        "    AND TRIM(c.state) != ''\r\n",
+        "    AND UPPER(o.order_status) != 'CANCELLED'\r\n",
+        "GROUP BY\r\n",
+        "    c.state,\r\n",
+        "    o.currency\r\n",
+        "ORDER BY\r\n",
+        "    total_revenue DESC;"
+      ]
+    },
+    {
+      "name": "19f0a801",
+      "displayName": "shipment_route_analysis",
+      "queryLines": [
+        "WITH shipment_data AS (\r\n",
+        "    SELECT\r\n",
+        "        s.shipment_id,\r\n",
+        "        s.order_id,\r\n",
+        "        s.shipment_status,\r\n",
+        "        c.state AS destination_state\r\n",
+        "    FROM workspace.ecommerce_silver.silver_shipments s\r\n",
+        "    INNER JOIN workspace.ecommerce_silver.silver_orders o\r\n",
+        "        ON s.order_id = o.order_id\r\n",
+        "    INNER JOIN workspace.ecommerce_silver.silver_customers c\r\n",
+        "        ON o.customer_id = c.customer_id\r\n",
+        "),\r\n",
+        "\r\n",
+        "state_coordinates AS (\r\n",
+        "    SELECT *\r\n",
+        "    FROM VALUES\r\n",
+        "        ('Tamil Nadu', 11.1271, 78.6569),\r\n",
+        "        ('Maharashtra', 19.7515, 75.7139),\r\n",
+        "        ('Delhi', 28.7041, 77.1025),\r\n",
+        "        ('Telangana', 18.1124, 79.0193),\r\n",
+        "        ('Karnataka', 15.3173, 75.7139),\r\n",
+        "        ('Kerala', 10.8505, 76.2711),\r\n",
+        "        ('Rajasthan', 27.0238, 74.2179),\r\n",
+        "        ('West Bengal', 22.9868, 87.8550)\r\n",
+        "    AS t(state, latitude, longitude)\r\n",
+        ")\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    sd.shipment_id,\r\n",
+        "    sd.order_id,\r\n",
+        "    sd.shipment_status,\r\n",
+        "    'Chennai' AS origin_city,\r\n",
+        "    sd.destination_state AS destination_city,\r\n",
+        "    13.0827 AS origin_latitude,\r\n",
+        "    80.2707 AS origin_longitude,\r\n",
+        "    sc.latitude AS destination_latitude,\r\n",
+        "    sc.longitude AS destination_longitude,\n",
+        "    ST_GEOMFROMTEXT(\n",
+        "        CONCAT(\n",
+        "            'LINESTRING(80.2707 13.0827, ',\n",
+        "            CAST(sc.longitude AS STRING), ' ',\n",
+        "            CAST(sc.latitude AS STRING),\n",
+        "            ')'\n",
+        "        )\n",
+        "    ) AS route_geometry\r\n",
+        "FROM shipment_data sd\r\n",
+        "INNER JOIN state_coordinates sc\r\n",
+        "    ON LOWER(TRIM(sd.destination_state)) = LOWER(TRIM(sc.state)); "
+      ]
+    },
+    {
+      "name": "d8b5867e",
+      "displayName": "order_value_histogram",
+      "queryLines": [
+        "SELECT\r\n",
+        "    order_value_range,\r\n",
+        "    COUNT(order_id) AS order_frequency\r\n",
+        "FROM (\r\n",
+        "    SELECT\r\n",
+        "        order_id,\r\n",
+        "        CASE\r\n",
+        "            WHEN order_total < 500 THEN '0 - 499'\r\n",
+        "            WHEN order_total < 1000 THEN '500 - 999'\r\n",
+        "            WHEN order_total < 2000 THEN '1000 - 1999'\r\n",
+        "            WHEN order_total < 5000 THEN '2000 - 4999'\r\n",
+        "            WHEN order_total < 10000 THEN '5000 - 9999'\r\n",
+        "            ELSE '10000+'\r\n",
+        "        END AS order_value_range\r\n",
+        "    FROM workspace.ecommerce_silver.silver_orders\r\n",
+        "    WHERE order_total IS NOT NULL\r\n",
+        "      AND order_total >= 0\r\n",
+        ") t\r\n",
+        "GROUP BY order_value_range;"
+      ]
+    },
+    {
+      "name": "81be463f",
+      "displayName": "ds_product_performance",
+      "queryLines": [
+        "SELECT\r\n",
+        "    product_id,\r\n",
+        "    product_name,\r\n",
+        "    category,\r\n",
+        "\r\n",
+        "    total_units_sold AS product_sales_quantity,\r\n",
+        "\r\n",
+        "    total_revenue AS product_revenue,\r\n",
+        "\r\n",
+        "    estimated_gross_profit AS product_profit,\r\n",
+        "\r\n",
+        "    estimated_profit_margin_percentage AS profit_margin_percentage,\r\n",
+        "\r\n",
+        "    total_orders,\r\n",
+        "    total_order_items,\r\n",
+        "\r\n",
+        "    unit_price,\r\n",
+        "    unit_cost,\r\n",
+        "    average_selling_price,\r\n",
+        "\r\n",
+        "    performance_category,\r\n",
+        "    category_revenue_rank\r\n",
+        "\r\n",
+        "FROM workspace.ecommerce_gold.gold_product_performance\r\n",
+        "\r\n",
+        "WHERE total_units_sold IS NOT NULL\r\n",
+        "  AND total_revenue IS NOT NULL;"
+      ]
+    },
+    {
+      "name": "1f1ac455",
+      "displayName": "ds_order_revenue_reconciliation",
+      "queryLines": [
+        "WITH reconciliation AS (\r\n",
+        "\r\n",
+        "    SELECT\r\n",
+        "        currency,\r\n",
+        "\r\n",
+        "        SUM(order_total) AS gross_order_value,\r\n",
+        "\r\n",
+        "        SUM(\r\n",
+        "            CASE\r\n",
+        "                WHEN UPPER(order_status) = 'CANCELLED'\r\n",
+        "                THEN order_total\r\n",
+        "                ELSE 0\r\n",
+        "            END\r\n",
+        "        ) AS cancelled_order_value,\r\n",
+        "\r\n",
+        "        SUM(refunded_amount) AS total_refunds,\r\n",
+        "\r\n",
+        "        SUM(net_payment_amount) AS net_collected_payment\r\n",
+        "\r\n",
+        "    FROM workspace.ecommerce_gold.gold_order_payment_summary\r\n",
+        "\r\n",
+        "    GROUP BY currency\r\n",
+        "),\r\n",
+        "\r\n",
+        "waterfall_values AS (\r\n",
+        "\r\n",
+        "    SELECT\r\n",
+        "        currency,\r\n",
+        "        gross_order_value,\r\n",
+        "        cancelled_order_value,\r\n",
+        "        total_refunds,\r\n",
+        "        net_collected_payment,\r\n",
+        "\r\n",
+        "        net_collected_payment -\r\n",
+        "        (\r\n",
+        "            gross_order_value\r\n",
+        "            - cancelled_order_value\r\n",
+        "            - total_refunds\r\n",
+        "        ) AS payment_collection_difference\r\n",
+        "\r\n",
+        "    FROM reconciliation\r\n",
+        ")\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    1 AS stage_order,\r\n",
+        "    'Gross Order Value' AS reconciliation_stage,\r\n",
+        "    gross_order_value AS amount,\r\n",
+        "    'TOTAL' AS stage_type,\r\n",
+        "    gross_order_value\r\n",
+        "\r\n",
+        "FROM waterfall_values\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    2,\r\n",
+        "    'Less Cancelled Order Value',\r\n",
+        "    -cancelled_order_value,\r\n",
+        "    'CHANGE',\r\n",
+        "    gross_order_value\r\n",
+        "\r\n",
+        "FROM waterfall_values\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    3,\r\n",
+        "    'Less Refunds',\r\n",
+        "    -total_refunds,\r\n",
+        "    'CHANGE',\r\n",
+        "    gross_order_value - cancelled_order_value\r\n",
+        "\r\n",
+        "FROM waterfall_values\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    4,\r\n",
+        "    'Payment Collection Difference',\r\n",
+        "    payment_collection_difference,\r\n",
+        "    'CHANGE',\r\n",
+        "    gross_order_value - cancelled_order_value - total_refunds\r\n",
+        "\r\n",
+        "FROM waterfall_values\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    currency,\r\n",
+        "    5,\r\n",
+        "    'Net Collected Payment',\r\n",
+        "    net_collected_payment,\r\n",
+        "    'TOTAL',\r\n",
+        "    net_collected_payment\r\n",
+        "\r\n",
+        "FROM waterfall_values\r\n",
+        "\r\n",
+        "ORDER BY currency, stage_order;"
+      ]
+    },
+    {
+      "name": "c3b05323",
+      "displayName": "ds_sankey_order_flow",
+      "queryLines": [
+        "SELECT\r\n",
+        "    'Orders Placed' AS source,\r\n",
+        "    'Orders Processed' AS target,\r\n",
+        "    COUNT(*) AS flow_value\r\n",
+        "FROM workspace.ecommerce_silver.silver_orders\r\n",
+        "WHERE order_status <> 'CANCELLED'\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    'Orders Processed',\r\n",
+        "    'Orders Cancelled',\r\n",
+        "    COUNT(*)\r\n",
+        "FROM workspace.ecommerce_silver.silver_orders\r\n",
+        "WHERE order_status = 'CANCELLED';"
+      ]
+    },
+    {
+      "name": "eead6644",
+      "displayName": "ds_sales_heatmap",
+      "queryLines": [
+        "SELECT\r\n",
+        "    DATE_FORMAT(order_date, 'yyyy-MM') AS sales_month,\r\n",
+        "    DAYOFWEEK(order_date) AS weekday_number,\r\n",
+        "    DATE_FORMAT(order_date, 'EEEE') AS weekday_name,\r\n",
+        "    SUM(gross_order_value) AS total_revenue\r\n",
+        "FROM workspace.ecommerce_gold.gold_daily_sales\r\n",
+        "GROUP BY\r\n",
+        "    DATE_FORMAT(order_date, 'yyyy-MM'),\r\n",
+        "    DAYOFWEEK(order_date),\r\n",
+        "    DATE_FORMAT(order_date, 'EEEE');"
+      ]
+    },
+    {
+      "name": "714e5d2e",
+      "displayName": "ds_order_funnel",
+      "queryLines": [
+        "SELECT\r\n",
+        "    1 AS stage_order,\r\n",
+        "    'Orders Placed' AS stage,\r\n",
+        "    total_orders AS stage_value\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    2,\r\n",
+        "    'Non-cancelled Orders',\r\n",
+        "    non_cancelled_orders\r\n",
+        "FROM workspace.ecommerce_gold.gold_executive_kpis;"
+      ]
+    },
+    {
+      "name": "4756b460",
+      "displayName": "ds_daily_sales_combo",
+      "queryLines": [
+        "SELECT\r\n",
+        "    order_date,\r\n",
+        "    SUM(gross_order_value) AS daily_revenue,\r\n",
+        "    SUM(total_orders) AS daily_orders\r\n",
+        "FROM workspace.ecommerce_gold.gold_daily_sales\r\n",
+        "GROUP BY order_date\r\n",
+        "ORDER BY order_date;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "aac7aac0",
+      "displayName": "E-Commerce_Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "total-orders",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1a3bb26",
+                  "fields": [
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "<span style=\"text-align:justify;display:block\"><span style=\"font-weight: 700;\">Total Orders</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_orders)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "total-revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1a3bb26",
+                  "fields": [
+                    {
+                      "name": "sum(gross_order_value)",
+                      "expression": "SUM(`gross_order_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total Revenue",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(gross_order_value)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "total-customers",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1a3bb26",
+                  "fields": [
+                    {
+                      "name": "sum(unique_purchasing_customers)",
+                      "expression": "SUM(`unique_purchasing_customers`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total Customers",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(unique_purchasing_customers)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "avg-order-value",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1a3bb26",
+                  "fields": [
+                    {
+                      "name": "sum(average_order_value)",
+                      "expression": "SUM(`average_order_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Average Order Value",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(average_order_value)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "daily-sales-trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "orders_by_month",
+                  "fields": [
+                    {
+                      "name": "order_month",
+                      "expression": "`order_month`"
+                    },
+                    {
+                      "name": "measure(cancelled_orders)",
+                      "expression": "MEASURE(`cancelled_orders`)"
+                    },
+                    {
+                      "name": "measure(non_cancelled_orders)",
+                      "expression": "MEASURE(`non_cancelled_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Cancelled vs Non-Cancelled Orders By Month (Counter Graph)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_month",
+                  "displayName": "Order Month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(cancelled_orders)",
+                      "displayName": "Cancelled"
+                    },
+                    {
+                      "fieldName": "measure(non_cancelled_orders)",
+                      "displayName": "Non-Cancelled"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "channel-sales",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1a3bb26",
+                  "fields": [
+                    {
+                      "name": "sum(available_products)",
+                      "expression": "SUM(`available_products`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "headerAlignment": "center",
+                "title": {
+                  "value": "Available Orders",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(available_products)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "light": "#1A1919"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 4,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "total-shipments",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1a3bb26",
+                  "fields": [
+                    {
+                      "name": "sum(total_shipments)",
+                      "expression": "SUM(`total_shipments`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total Shipments",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_shipments)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 4,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "daily-sales-trend-1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "69766b02",
+                  "fields": [
+                    {
+                      "name": "monthly(order_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `order_date`)"
+                    },
+                    {
+                      "name": "sum(average_order_value)",
+                      "expression": "SUM(`average_order_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Daily Sales Trend (Bar Graph)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(order_date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(average_order_value)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "sum-of-payment-count-pie-chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8c234920",
+                  "fields": [
+                    {
+                      "name": "sum(payment_count)",
+                      "expression": "SUM(`payment_count`)"
+                    },
+                    {
+                      "name": "payment_status",
+                      "expression": "`payment_status`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Sum Of Paymnet Count (Pie Chart)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(payment_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "payment_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true,
+                  "text": {
+                    "fieldName": "sum(payment_count)"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "payment_status"
+                  },
+                  {
+                    "fieldName": "sum(payment_count)"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "payment-attempts-by-status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "09e54c5f",
+                  "fields": [
+                    {
+                      "name": "metric",
+                      "expression": "`metric`"
+                    },
+                    {
+                      "name": "sum(successful)",
+                      "expression": "SUM(`successful`)"
+                    },
+                    {
+                      "name": "sum(failed)",
+                      "expression": "SUM(`failed`)"
+                    },
+                    {
+                      "name": "sum(pending)",
+                      "expression": "SUM(`pending`)"
+                    },
+                    {
+                      "name": "sum(refunded)",
+                      "expression": "SUM(`refunded`)"
+                    }
+                  ],
+                  "cubeGroupingSets": {
+                    "sets": [
+                      {
+                        "fieldNames": [
+                          "metric"
+                        ]
+                      },
+                      {}
+                    ]
+                  },
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "`metric`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Payment Attempts By Status (Pivot)",
+                  "fields": []
+                }
+              },
+              "version": 4,
+              "widgetType": "pivot",
+              "encodings": {
+                "rows": {
+                  "fields": [
+                    {
+                      "fieldName": "metric",
+                      "scale": {
+                        "type": "categorical"
+                      }
+                    }
+                  ]
+                },
+                "cells": {
+                  "fields": [
+                    {
+                      "fieldName": "sum(successful)",
+                      "cellType": "text"
+                    },
+                    {
+                      "fieldName": "sum(failed)",
+                      "cellType": "text"
+                    },
+                    {
+                      "fieldName": "sum(pending)",
+                      "cellType": "text"
+                    },
+                    {
+                      "fieldName": "sum(refunded)",
+                      "cellType": "text"
+                    }
+                  ],
+                  "displayAs": "rows"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 20,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "ds_executive_summary_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9ca1785e",
+                  "fields": [
+                    {
+                      "name": "currency",
+                      "expression": "`currency`"
+                    },
+                    {
+                      "name": "total_orders",
+                      "expression": "`total_orders`"
+                    },
+                    {
+                      "name": "non_cancelled_orders",
+                      "expression": "`non_cancelled_orders`"
+                    },
+                    {
+                      "name": "cancelled_orders",
+                      "expression": "`cancelled_orders`"
+                    },
+                    {
+                      "name": "unique_purchasing_customers",
+                      "expression": "`unique_purchasing_customers`"
+                    },
+                    {
+                      "name": "gross_order_value",
+                      "expression": "`gross_order_value`"
+                    },
+                    {
+                      "name": "average_order_value",
+                      "expression": "`average_order_value`"
+                    },
+                    {
+                      "name": "order_cancellation_rate",
+                      "expression": "`order_cancellation_rate`"
+                    },
+                    {
+                      "name": "successful_payment_attempts",
+                      "expression": "`successful_payment_attempts`"
+                    },
+                    {
+                      "name": "failed_payment_attempts",
+                      "expression": "`failed_payment_attempts`"
+                    },
+                    {
+                      "name": "pending_payment_attempts",
+                      "expression": "`pending_payment_attempts`"
+                    },
+                    {
+                      "name": "refunded_payment_attempts",
+                      "expression": "`refunded_payment_attempts`"
+                    },
+                    {
+                      "name": "successful_payment_amount",
+                      "expression": "`successful_payment_amount`"
+                    },
+                    {
+                      "name": "net_payment_amount",
+                      "expression": "`net_payment_amount`"
+                    },
+                    {
+                      "name": "payment_success_rate",
+                      "expression": "`payment_success_rate`"
+                    },
+                    {
+                      "name": "delivery_rate",
+                      "expression": "`delivery_rate`"
+                    },
+                    {
+                      "name": "total_products",
+                      "expression": "`total_products`"
+                    },
+                    {
+                      "name": "total_inventory_units",
+                      "expression": "`total_inventory_units`"
+                    },
+                    {
+                      "name": "available_products",
+                      "expression": "`available_products`"
+                    },
+                    {
+                      "name": "low_stock_products",
+                      "expression": "`low_stock_products`"
+                    },
+                    {
+                      "name": "out_of_stock_products",
+                      "expression": "`out_of_stock_products`"
+                    },
+                    {
+                      "name": "inventory_availability_rate",
+                      "expression": "`inventory_availability_rate`"
+                    },
+                    {
+                      "name": "executive_payment_status",
+                      "expression": "`executive_payment_status`"
+                    },
+                    {
+                      "name": "executive_delivery_status",
+                      "expression": "`executive_delivery_status`"
+                    },
+                    {
+                      "name": "executive_inventory_status",
+                      "expression": "`executive_inventory_status`"
+                    },
+                    {
+                      "name": "generated_at",
+                      "expression": "`generated_at`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Ds Executive Summary (Table)",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "currency"
+                  },
+                  {
+                    "fieldName": "total_orders"
+                  },
+                  {
+                    "fieldName": "non_cancelled_orders"
+                  },
+                  {
+                    "fieldName": "cancelled_orders"
+                  },
+                  {
+                    "fieldName": "unique_purchasing_customers"
+                  },
+                  {
+                    "fieldName": "gross_order_value"
+                  },
+                  {
+                    "fieldName": "average_order_value"
+                  },
+                  {
+                    "fieldName": "order_cancellation_rate"
+                  },
+                  {
+                    "fieldName": "successful_payment_attempts"
+                  },
+                  {
+                    "fieldName": "failed_payment_attempts"
+                  },
+                  {
+                    "fieldName": "pending_payment_attempts"
+                  },
+                  {
+                    "fieldName": "refunded_payment_attempts"
+                  },
+                  {
+                    "fieldName": "successful_payment_amount"
+                  },
+                  {
+                    "fieldName": "net_payment_amount"
+                  },
+                  {
+                    "fieldName": "payment_success_rate"
+                  },
+                  {
+                    "fieldName": "delivery_rate"
+                  },
+                  {
+                    "fieldName": "total_products"
+                  },
+                  {
+                    "fieldName": "total_inventory_units"
+                  },
+                  {
+                    "fieldName": "available_products"
+                  },
+                  {
+                    "fieldName": "low_stock_products"
+                  },
+                  {
+                    "fieldName": "out_of_stock_products"
+                  },
+                  {
+                    "fieldName": "inventory_availability_rate"
+                  },
+                  {
+                    "fieldName": "executive_payment_status"
+                  },
+                  {
+                    "fieldName": "executive_delivery_status"
+                  },
+                  {
+                    "fieldName": "executive_inventory_status"
+                  },
+                  {
+                    "fieldName": "generated_at"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 26,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "daily-sales-area-trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "69766b02",
+                  "fields": [
+                    {
+                      "name": "monthly(order_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `order_date`)"
+                    },
+                    {
+                      "name": "sum(gross_order_value)",
+                      "expression": "SUM(`gross_order_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "\tDaily Sales Area Trend",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "area",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(order_date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(gross_order_value)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 29,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "e-commerce-pipeline-execution-timeline",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c06de212",
+                  "fields": [
+                    {
+                      "name": "first(execution_status)",
+                      "expression": "FIRST(`execution_status`)"
+                    },
+                    {
+                      "name": "first(end_timestamp)",
+                      "expression": "FIRST(`end_timestamp`)"
+                    },
+                    {
+                      "name": "min(start_timestamp)",
+                      "expression": "MIN(`start_timestamp`)"
+                    },
+                    {
+                      "name": "max(end_timestamp)",
+                      "expression": "MAX(`end_timestamp`)"
+                    },
+                    {
+                      "name": "task_name",
+                      "expression": "`task_name`"
+                    },
+                    {
+                      "name": "sum(duration_seconds)",
+                      "expression": "SUM(`duration_seconds`)"
+                    }
+                  ],
+                  "cubeGroupingSets": {
+                    "sets": [
+                      {
+                        "fieldNames": [
+                          "task_name"
+                        ]
+                      },
+                      {}
+                    ]
+                  },
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "`task_name`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "E-Commerce Pipeline Execution Timeline (Gantt chart)",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "gantt",
+              "encodings": {
+                "rows": {
+                  "fields": [
+                    {
+                      "fieldName": "task_name"
+                    }
+                  ]
+                },
+                "range": {
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "start": {
+                    "fieldName": "min(start_timestamp)"
+                  },
+                  "end": {
+                    "fieldName": "max(end_timestamp)"
+                  }
+                },
+                "color": {
+                  "fieldName": "first(execution_status)",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "values": [
+                  {
+                    "fieldName": "sum(duration_seconds)"
+                  }
+                ],
+                "label": {
+                  "show": true,
+                  "text": {
+                    "fieldName": "first(end_timestamp)"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "filterSources": {
+              "mode": "EXCLUDE",
+              "global": {
+                "all": true
+              },
+              "page": {
+                "all": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 35,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue-by-state",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a0f313f2",
+                  "fields": [
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    },
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    },
+                    {
+                      "name": "state",
+                      "expression": "`state`"
+                    },
+                    {
+                      "name": "sum(average_order_value)",
+                      "expression": "SUM(`average_order_value`)"
+                    },
+                    {
+                      "name": "currency",
+                      "expression": "`currency`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Revenue By State (Choroplath Map)",
+                  "fields": []
+                }
+              },
+              "version": 1,
+              "widgetType": "choropleth-map",
+              "encodings": {
+                "color": {
+                  "fieldName": "sum(total_revenue)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "sum(total_orders)"
+                  },
+                  {
+                    "fieldName": "state"
+                  },
+                  {
+                    "fieldName": "sum(total_orders)"
+                  },
+                  {
+                    "fieldName": "sum(average_order_value)"
+                  },
+                  {
+                    "fieldName": "currency"
+                  }
+                ],
+                "region": {
+                  "regionType": "mapbox-v4-admin",
+                  "admin0": {
+                    "type": "value",
+                    "value": "India",
+                    "geographicRole": "admin0-name"
+                  },
+                  "admin1": {
+                    "fieldName": "state",
+                    "type": "field",
+                    "geographicRole": "admin1-name"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 43,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "a4622f6b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "19f0a801",
+                  "fields": [
+                    {
+                      "name": "destination_city",
+                      "expression": "`destination_city`"
+                    },
+                    {
+                      "name": "geo_first(route_geometry)",
+                      "expression": "ST_ASGEOJSON(FIRST(`route_geometry`))"
+                    },
+                    {
+                      "name": "count(shipment_id)",
+                      "expression": "COUNT(`shipment_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Shipment Flow: Chennai to Destination States (Path Map)",
+                  "fields": []
+                }
+              },
+              "version": 1,
+              "widgetType": "path-map",
+              "encodings": {
+                "path": {
+                  "pathType": "geometry",
+                  "fieldName": "geo_first(route_geometry)"
+                },
+                "color": {
+                  "fieldName": "destination_city",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "size": {
+                  "fieldName": "count(shipment_id)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 49,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "order-value-distribution-histogram",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d8b5867e",
+                  "fields": [
+                    {
+                      "name": "order_value_range",
+                      "expression": "`order_value_range`"
+                    },
+                    {
+                      "name": "sum(order_frequency)",
+                      "expression": "SUM(`order_frequency`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "\tOrder Value Distribution (Histogram)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "histogram",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_value_range",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(order_frequency)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 55,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "product-sales-vs-revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "81be463f",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "product_name",
+                      "expression": "`product_name`"
+                    },
+                    {
+                      "name": "product_profit",
+                      "expression": "`product_profit`"
+                    },
+                    {
+                      "name": "product_sales_quantity",
+                      "expression": "`product_sales_quantity`"
+                    },
+                    {
+                      "name": "product_revenue",
+                      "expression": "`product_revenue`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "\tProduct Sales vs Revenue (Scatter Plot)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_sales_quantity",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "size": {
+                  "fieldName": "product_profit",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "product_name"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 61,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "gross-to-net-revenue-reconciliation",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1f1ac455",
+                  "fields": [
+                    {
+                      "name": "reconciliation_stage",
+                      "expression": "`reconciliation_stage`"
+                    },
+                    {
+                      "name": "sum(amount)",
+                      "expression": "SUM(`amount`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Gross-to-Net Revenue Reconciliation (Waterfall chart)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "waterfall",
+              "encodings": {
+                "x": {
+                  "fieldName": "reconciliation_stage",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(amount)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 67,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "order-processing-flow-sankey",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c3b05323",
+                  "fields": [
+                    {
+                      "name": "source",
+                      "expression": "`source`"
+                    },
+                    {
+                      "name": "target",
+                      "expression": "`target`"
+                    },
+                    {
+                      "name": "sum(flow_value)",
+                      "expression": "SUM(`flow_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Order Processing Flow (Sankey chart)",
+                  "fields": []
+                }
+              },
+              "version": 1,
+              "widgetType": "sankey",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(flow_value)"
+                },
+                "stages": [
+                  {
+                    "fieldName": "source"
+                  },
+                  {
+                    "fieldName": "target"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 73,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "monthly-weekday-sales-heatmap",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "eead6644",
+                  "fields": [
+                    {
+                      "name": "total_revenue",
+                      "expression": "`total_revenue`"
+                    },
+                    {
+                      "name": "sales_month",
+                      "expression": "`sales_month`"
+                    },
+                    {
+                      "name": "weekday_name",
+                      "expression": "`weekday_name`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Monthly Weekday Sales Heatmap (Heat map)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sales_month",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "weekday_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 73,
+            "width": 8,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "order-conversion-funnel",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "714e5d2e",
+                  "fields": [
+                    {
+                      "name": "sum(stage_value)",
+                      "expression": "SUM(`stage_value`)"
+                    },
+                    {
+                      "name": "stage",
+                      "expression": "`stage`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Order Conversion (Funnel)",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "funnel",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(stage_value)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "stage",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 79,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "daily-revenue-vs-order-count-combo-chart",
+            "queries": [
+              {
+                "name": "combo_primary_1",
+                "query": {
+                  "datasetName": "4756b460",
+                  "fields": [
+                    {
+                      "name": "monthly(order_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `order_date`)"
+                    },
+                    {
+                      "name": "sum(daily_revenue)",
+                      "expression": "SUM(`daily_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "combo_primary_2",
+                "query": {
+                  "datasetName": "4756b460",
+                  "fields": [
+                    {
+                      "name": "monthly(order_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `order_date`)"
+                    },
+                    {
+                      "name": "sum(daily_orders)",
+                      "expression": "SUM(`daily_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Daily Revenue vs Order Count (Combo chart)",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "combo",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(order_date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "layers": [
+                    {
+                      "visual": "bar",
+                      "encodings": {
+                        "value": {
+                          "fields": [
+                            {
+                              "fieldName": "sum(daily_revenue)"
+                            }
+                          ]
+                        }
+                      },
+                      "queryName": "combo_primary_1"
+                    },
+                    {
+                      "visual": "line",
+                      "encodings": {
+                        "value": {
+                          "fields": [
+                            {
+                              "fieldName": "sum(daily_orders)"
+                            }
+                          ]
+                        }
+                      },
+                      "queryName": "combo_primary_2"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 85,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
